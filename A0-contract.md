@@ -49,9 +49,9 @@ Student Number:
 
 Team Member #3:
 
-Name:
+Name: Danel
 
-Student Number:	
+Student Number:	20232045
 
 
 Team Member #4:
