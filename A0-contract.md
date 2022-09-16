@@ -56,6 +56,6 @@ Student Number:	20232045
 
 Team Member #4:
 
-Name:
+Name: Brian Grigore
 
-Student Number:	
+Student Number:	20232817
