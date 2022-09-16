@@ -42,9 +42,9 @@ Student Number:	20216964
 
 Team Member #2:
 
-Name:
+Name: Gary Farberov 
 
-Student Number:	
+Student Number:	20222216
 
 
 Team Member #3:
