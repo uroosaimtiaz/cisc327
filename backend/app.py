@@ -16,7 +16,7 @@ class User(db.Model):
 
 
 class Booking(db.Model):
-    """Booking Entity. Stores which listing a user wants to bookand other
+    """Booking Entity. Stores which listing a user wants to book and other
     information.
     """
 
@@ -42,6 +42,15 @@ class Listing(db.Model):
    house_type = db.Column(db.String(80)) #eg. apartment, bangalow, room, van
    rental_cost = db.Column(db.Integer) #cost per night
    description = db.Column(db.String(2000)) #ad description of property and amenities
- 
+
+class Review(db.Model):
+    """Review Enitity. Structure for leaving user reviews."""
+    review_type = db.Column(db.String(100), nullable=False) # type of review, profile or listing
+    star_number = db.Column(db.Integer, primary_key=True) # number of stars the user rates
+    review_title = db.Column(db.String(150), nullable=False) # the title of the review
+    review_description = db.Column(db.String(500), nullable=False) # the review description
+
+
+
    def __repr__(self):
        return '< Listing at %r>' % self.street_address
