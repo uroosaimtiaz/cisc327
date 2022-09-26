@@ -31,3 +31,17 @@ class Booking(db.Model):
 
     # approval to book from owner
     approval = db.Column(db.Boolean, nullable=False)  
+
+class Listing(db.Model):
+    # Data Entity for Listing will store the location and description
+    # of a specific listing; the images will be stored somewhere else.
+   street_address = db.Column(db.String(150)) #store street address
+   postal_code = db.Column(db.String(60)) #store postal code
+   state = db.Column(db.String(80)) #store the state or province
+   country = db.Column(db.String(80)) #stores country
+   house_type = db.Column(db.String(80)) #eg. apartment, bangalow, room, van
+   rental_cost = db.Column(db.Integer) #cost per night
+   description = db.Column(db.String(2000)) #ad description of property and amenities
+ 
+   def __repr__(self):
+       return '< Listing at %r>' % self.street_address
