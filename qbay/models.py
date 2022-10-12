@@ -40,7 +40,7 @@ db.create_all()
 
 
 def register(name, email, password):
-    '''
+    """
     Register a new user
       Parameters:
         name (string):     user name
@@ -48,10 +48,11 @@ def register(name, email, password):
         password (string): user password
       Returns:
         True if registration succeeded otherwise False
-    '''
+    """
     # check if the email has been used:
     existed = User.query.filter_by(email=email).all()
     if len(existed) > 0:
+        print("existed1")
         return False
 
     #  validating the email follows RFC 5322
@@ -80,6 +81,7 @@ def register(name, email, password):
 
     # length username
     if len(name) <= 2 or len(name) >= 20:
+        print("not long enough")
         return False
 
     # checking username requirements
@@ -87,6 +89,7 @@ def register(name, email, password):
     temp_name = name.replace(" ", "")
 
     if name[0] == " " or name[-1] == " " or temp_name.isalnum() is not True:
+        print("name error")
         return False
 
     # create a new user
