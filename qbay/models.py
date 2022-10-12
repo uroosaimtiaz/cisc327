@@ -106,14 +106,40 @@ def register(name, email, password):
 
 
 def login(email, password):
-    '''
+    """
     Check login information
       Parameters:
         email (string):    user email
         password (string): user password
       Returns:
         The user object if login succeeded otherwise None
-    '''
+    """
+    # validating the email follows RFC 5322
+    try:
+        validate_email(email).email
+    except EmailNotValidError as errorMsg:
+        print(str(errorMsg))
+        return None
+
+    # checking for password requirements
+    upper_count = 0
+    lower_count = 0
+    special_count = 0
+
+    password = str(password)
+    for letter in password:
+        if letter in upper_characters:
+            upper_count += 1
+        if letter in lower_characters:
+            lower_count += 1
+        if letter in special_characters:
+            special_count += 1
+
+    if upper_count <= 0 or lower_count <= 0 or special_count <= 0 or \
+            len(password) < 6:
+        print("password invalid")
+        return None
+
     valids = User.query.filter_by(email=email, password=password).all()
     if len(valids) != 1:
         return None
