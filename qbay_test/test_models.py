@@ -151,3 +151,4 @@ def test_r1_10_user_register():
 
     if user14.postal_code is not None:
         assert False, "Balance is not 100 upon registration"
+
