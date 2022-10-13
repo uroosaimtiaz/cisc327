@@ -1,8 +1,10 @@
+from turtle import up
 from qbay import app
 from flask_sqlalchemy import SQLAlchemy
 import string
 from email_validator import validate_email, EmailNotValidError
 import uuid
+from datetime import date
 
 '''
 This file defines data models and related business logics
@@ -33,6 +35,53 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
+
+
+class Listing(db.Model):
+    id = db.Column(db.String, unique=True, primary_key=True)
+    title = db.Column(
+        db.String(80), nullable=False)
+    description = db.Column(
+        db.String(2000), nullable=False)
+    price = db.Column(
+        db.Integer, nullable=False)
+    last_modified_date = db.Column(
+        db.Date)
+    owner_id = db.Column(
+        db.String, nullable=False)
+
+    def __repr__(self):
+        return '<Listing %r>' % self.title
+
+
+class Booking(db.Model):
+    id = db.Column(db.String, unique=True, primary_key=True)
+    price = db.Column(
+        db.Integer, nullable=False)
+    listing_id = db.Column(
+        db.String, nullable=False)
+    user_id = db.Column(
+        db.String, nullable=False)
+    date = db.Column(
+        db.Date)
+
+    def __repr__(self):
+        return '<Booking %r>' % self.id
+
+
+class Review(db.Model):
+    id = db.Column(db.String, unique=True, primary_key=True)
+    review_text = db.Column(
+        db.String(2000), nullable=False)
+    listing_id = db.Column(
+        db.String, nullable=False)
+    user_id = db.Column(
+        db.String, nullable=False)
+    date = db.Column(
+        db.Date)
+
+    def __repr__(self):
+        return '<Review %r>' % self.review_text
 
 
 # create all tables
@@ -247,3 +296,248 @@ def update_user(old_email, password, new_email, new_name, new_billing_address,
     # all user changes are committed to database
     db.session.commit()
     return user
+
+
+def create_listing(owner_email, password, title, description, price):
+    """
+    Create a new listing
+      Parameters:
+        owner_email (string):   email of the owner
+        password (string):      password of the owner
+        title (string):         listing title
+        description (string):   listing description
+        price (integer):        listing price
+      Returns:
+        Listing if successfully created or None
+    """
+
+    # user must provide correct credentials to login
+    user = login(owner_email, password)
+
+    # if user fails to login no changes can be made
+    if user is None:
+        print("User does not exist or login unsuccessful.")
+        return None
+
+    # title must be between 1 and 80 characters
+    if len(title) > 80:
+        print("Incorrect Title length.")
+        return None
+    if len(title) == 0:
+        print("Incorrect Title length.")
+        return None
+
+    # title must contain only alphanumeric chars
+    temp_title = title.replace(" ", "")
+
+    # title cannot have " " prefix or suffix
+    if title[0] == " " or title[-1] == " " or temp_title.isalnum() is not True:
+        print("Title contains illegal characters.")
+        return None
+
+    # description must be between 20 and 2000 characters
+    if len(description) > 2000:
+        print("Description is incorrect length.")
+        return None
+    if len(description) < 20:
+        print("Description is incorrect length.")
+        return None
+
+    # description must be longer than title
+    if len(description) < len(title):
+        print("Description must be longer than title.")
+        return None
+
+    # price has to be between 10 and 10000
+    if price > 10000:
+        print("Price out of range")
+        return None
+    if price < 10:
+        print("Price out of range")
+        return None
+
+    # today date must be after 2021-01-02
+    # and before 2025-01-02
+    today = date.today()
+    print(today)
+    if 2025 < today.year < 2021:
+        print("Year out of range.")
+        return None
+    if today.year == 2021:
+        if today.month == 1 and today.day < 3:
+            print("Cannot be before 2021-01-03")
+            return None
+    if today.year == 2025:
+        if today.month > 1 and today.day > 1:
+            print("Cannot be after 2025-01-01")
+            return None
+
+    # user cannot have more than one listing
+    # with the same title
+    existing_listing = Listing.query.filter_by(owner_id=owner_email,
+                                               title=title).all()
+    if len(existing_listing) != 0:
+        print("User already has a listing with same title.")
+        return None
+
+    # create listing
+    listing = Listing(title=title, description=description, price=price,
+                      owner_id=owner_email)
+    db.session.add(listing)
+    print("Listing created: ", listing.title)
+
+    # set unique id for listing
+    listing.id = str(uuid.uuid1())
+    print("Listing id created: ", listing.id)
+
+    # set last modified date for listing
+    listing.last_modified_date = today
+    print("Listing date: ", listing.last_modified_date)
+
+    db.session.commit()
+
+    return listing
+
+
+def get_listing(list_id):
+    """
+    Find an existing listing
+        Parameters:
+        list_id (string):       unique id of listing
+        Returns:
+        Listing if exists or None
+    """
+    valids = Listing.query.filter_by(id=list_id).all()
+    if len(valids) != 1:
+        return None
+    return valids[0]
+
+
+def update_listing(email, password, id, title, utitle, description,
+                   udescription, price, uprice):
+    """
+    Update an existing listing
+        Parameters:
+        email (string):         email of the owner
+        password (string):      password of the owner
+        title (string):         listing title
+        description (string):   listing description
+        price (integer):        listing price
+        Returns:
+        Listing if successfully updated or None
+    """
+    # user must provide correct credentials to login
+    user = login(email, password)
+
+    # if user fails to login no changes can be made
+    if user is None:
+        print("User does not exist or login unsuccessful.")
+        return None
+
+    # find listing to be modified
+    listing = get_listing(id)
+    if listing is None:
+        print("Listing was not found.")
+        return None
+
+    # code will only execute if request title update
+    if utitle:
+        print("Title update requested.")
+        # title must be between 1 and 80 characters
+        if len(title) > 80:
+            print("Incorrect Title length.")
+            return None
+        if len(title) == 0:
+            print("Incorrect Title length.")
+            return None
+
+        # title must contain only alphanumeric chars
+        temp_title = title.replace(" ", "")
+
+        # title cannot have " " prefix or suffix
+        if title[0] == " " or title[-1] == " " or\
+                temp_title.isalnum() is not True:
+            print("Title contains illegal characters.")
+            return None
+
+        # user cannot have more than one listing
+        # with the same title
+        existing_listing_title = Listing.query.filter_by(owner_id=email,
+                                                         title=title).all()
+        if len(existing_listing_title) != 0:
+            print("User already has a listing with same title.")
+            return None
+
+        #  check title length against description
+        if not udescription and len(title) > len(listing.description):
+            print("The listing title was longer than description.")
+            return None
+
+        # update title
+        listing.title = title
+
+    if udescription:
+        print("Description update requested.")
+
+        # description must be between 20 and 2000 characters
+        if len(description) > 2000:
+            print("Description is incorrect length.")
+            return None
+        if len(description) < 20:
+            print("Description is incorrect length.")
+            return None
+
+        # description must be longer than title
+        if len(description) < len(listing.title):
+            print("Description must be longer than title.")
+            return None
+
+        #  check length of description against title
+        if len(description) < len(listing.title):
+            print("The listing title was longer than description.")
+            return None
+
+        # update description
+        listing.description = description
+
+    if uprice:
+        print("Price update requested.")
+
+        # price has to be between 10 and 10000
+        if price > 10000:
+            print("Price out of range")
+            return None
+        if price < 10:
+            print("Price out of range")
+            return None
+
+        # price can only increase or stay same from listing amount
+        if listing.price > price:
+            print("Price can only increased, not decreased.")
+            return None
+
+        # update price
+        listing.price = price
+
+    # today date must be after 2021-01-02
+    # and before 2025-01-02
+    today = date.today()
+    print(today)
+    if 2025 < today.year < 2021:
+        print("Year out of range.")
+        return None
+    if today.year == 2021:
+        if today.month == 1 and today.day < 3:
+            print("Cannot be before 2021-01-03")
+            return None
+    if today.year == 2025:
+        if today.month > 1 and today.day > 1:
+            print("Cannot be after 2025-01-01")
+            return None
+
+    # update last modified date
+    if utitle or udescription or uprice:
+        listing.last_modified_date = today
+
+    db.session.commit()
+    return listing
