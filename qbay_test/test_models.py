@@ -1,10 +1,10 @@
-from qbay.models import register, login, User
+from qbay.models import register, login, User, update_user
 
 
 def test_r1_1_user_register():
-    '''
+    """
     Testing R1-1: If the email or password is empty, opeation failed.
-    '''
+    """
 
     assert register('user1', 'test2@test.com', 'goodPass.123') is True
     assert register('user2', 'test3@test.com', '') is False
@@ -13,9 +13,9 @@ def test_r1_1_user_register():
 
 
 def test_r1_2_user_register():
-    '''
+    """
     Testing R1-2: Checking that the user id is unique.
-    '''
+    """
 
     register('user20', 'test20@test.com', 'goodPass.123')
 
@@ -40,32 +40,32 @@ def test_r1_2_user_register():
 
 
 def test_r1_3_user_register():
-    '''
+    """
     Testing R1-3: email has to follow RFC-5322
-    '''
+    """
 
-    assert register('user2', 'test4@test.com', 'goodPass.123') is True
+    assert register('user2', 'test42@test.com', 'goodPass.123') is True
     assert register('user2', 'test4@test.', 'goodPass.123') is False
     assert register('user2', 'te@st5@test.com', 'goodPass.123') is False
 
 
 def test_r1_4_user_register():
-    '''
+    """
     Testing R1-4: password must meet certain requirements
-    '''
+    """
 
-    assert register('user3', 'test5@test.com', 'goodPass.123') is True
+    assert register('user3', 'test51@test.com', 'goodPass.123') is True
     assert register('user3', 'test6@test.com', 'goodPass') is False
     assert register('user3', 'test6@test.com', 'gggg') is False
     assert register('user3', 'test6@test.com', 'grand.444') is False
 
 
 def test_r1_5_user_register():
-    '''
+    """
     Testing R1-5: username must meet certain requirements
-    '''
+    """
 
-    assert register('good 123 name', 'test6@test.com', 'goodPass.123') is True
+    assert register('good 123 name', 'test61@test.com', 'goodPass.123') is True
     assert register('badusername ', 'test7@test.com', 'goodPass.123') is False
     assert register(' badusername', 'test7@test.com', 'goodPass.123') is False
     assert register(' badusername ', 'test7@test.com', 'goodPass.123') is False
@@ -74,10 +74,10 @@ def test_r1_5_user_register():
 
 
 def test_r1_6_user_register():
-    '''
+    """
     Testing R1-6: username must be more than 2 character and less than 20
     otherwise failure
-    '''
+    """
 
     assert register('user6', 'test7@test.com', 'goodPass.123') is True
     assert register('u0', 'test8@test.com', 'goodPass.123') is False
@@ -86,9 +86,9 @@ def test_r1_6_user_register():
 
 
 def test_r1_7_user_register():
-    '''
+    """
     Testing R1-7: If the email has been used, the operation failed.
-    '''
+    """
 
     assert register('user0', 'test0@test.com', 'goodPass.123') is True
     assert register('user0', 'test1@test.com', 'goodPass.123') is True
@@ -96,9 +96,9 @@ def test_r1_7_user_register():
 
 
 def test_r1_8_user_register():
-    '''
+    """
     Testing R1-8: billing address must be empty at registration.
-    '''
+    """
 
     register('user9', 'test9@test.com', 'goodPass.123')
 
@@ -115,9 +115,9 @@ def test_r1_8_user_register():
 
 
 def test_r1_9_user_register():
-    '''
+    """
     Testing R1-9: Postal code must be empty at time of registration
-    '''
+    """
 
     register('user11', 'test11@test.com', 'goodPass.123')
 
@@ -135,9 +135,9 @@ def test_r1_9_user_register():
 
 
 def test_r1_10_user_register():
-    '''
+    """
     Testing R1-10: balance must be 100.00 at time of registration
-    '''
+    """
 
     register('user13', 'test13@test.com', 'goodPass.123')
 
@@ -151,3 +151,98 @@ def test_r1_10_user_register():
 
     if user14.postal_code is not None:
         assert False, "Balance is not 100 upon registration"
+
+
+def test_r2_1_login():
+    """
+    Testing R2-1: A user can log in using her/his email address
+      and the password.
+    (will be tested after the previous test, so we already have test2,
+         in database)
+    """
+
+    user = login('test2@test.com', 'goodPass.123')
+    assert user is not None
+    assert user.username == 'user1'
+
+    user = login('test2@test.com', "1234567")
+    assert user is None
+
+
+def test_r2_2_login():
+    """
+    Testing R2-2: Login requirements meet same email/password requirements
+    as register function before checking database.
+    """
+    user = login("", "")
+    assert user is None
+
+    user = login("test0@test.com", "")
+    assert user is None
+
+    user = login("", "123456")
+    assert user is None
+
+    user = login("test0@test.com", "")
+    assert user is None
+
+    user = login("test@@test.com", "1234")
+    assert user is None
+
+    user = login('test2@test.com', 'goodPass.123')
+    assert user is not None
+
+
+def test_r3_1_user_update():
+    """
+    Testing R3-1: A user is only able to update their username, user address,
+    email or postal code.
+    """
+
+    user = update_user("test2@test.com", "goodPass.123", "test91@test.com",
+                       "u8", "8 Songwood Drive", "M9M 1X3")
+    assert user is not None
+
+
+def test_r3_2_user_update():
+    """
+        Testing R3-2: A postal code should be non-empty, alphanumeric only,
+        and no special characters such as !.
+    """
+    user = update_user("test9@test.com", "goodPass.123", "test9@test.com",
+                       "u8", "8 Songwood Drive", "")
+    assert user is None
+
+    user = update_user("test9@test.com", "goodPass.123", "test9@test.com",
+                       "u8", "8 Songwood Drive", "M9M !X3")
+    assert user is None
+
+
+def test_r3_3_user_update():
+    """
+        Testing R3-3: Postal code has to be a valid Canadian postal code.
+    """
+    user = update_user("test9@test.com", "goodPass.123", " ",
+                       "u8", "8 Songwood Drive", "m9M 1X3")
+    assert user is None
+
+    user = update_user("test9@test.com", "goodPass.123", " ",
+                       "u8", "8 Songwood Drive", "M9M 2X3")
+    assert user is not None
+
+
+def test_r3_4_user_update():
+    """
+        Testing R3-4: User name follows the requirements above.
+    """
+    user = update_user("test91@test.com", "goodPass.123", "test912@test.com",
+                       " u!8", "8 Songwood Drive", "M9M 1X3")
+    assert user is None
+
+    user = update_user("test912@test.com", "goodPass.123", " ",
+                       "user81", "8 Songwood Drive", "M9M 1X3")
+    assert user is not None
+
+    user = update_user("test912@test.com", "goodPass.123", " ",
+                       " ", "8 Songwood Drive", "M9M 1X3")
+    assert user is not None
