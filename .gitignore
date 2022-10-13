@@ -12,10 +12,10 @@
 /build
 
 #pytest
-#/.pytest_cache
-#/instance
-#/qbay/__pycache__
-#/qbay_test/__pycache__
+/.pytest_cache
+/instance
+/qbay/__pycache__
+/qbay_test/__pycache__
 
 # misc
 .DS_Store
