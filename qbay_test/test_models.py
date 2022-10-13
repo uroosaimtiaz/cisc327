@@ -1,4 +1,4 @@
-from qbay.models import register, login, User
+from qbay.models import register, login, User, update_user
 
 
 def test_r1_1_user_register():
@@ -190,4 +190,59 @@ def test_r2_2_login():
     assert user is None
 
     user = login('test2@test.com', 'goodPass.123')
+    assert user is not None
+
+
+def test_r3_1_user_update():
+    """
+    Testing R3-1: A user is only able to update their username, user address,
+    email or postal code.
+    """
+
+    user = update_user("test2@test.com", "goodPass.123", "test91@test.com",
+                       "u8", "8 Songwood Drive", "M9M 1X3")
+    assert user is not None
+
+
+def test_r3_2_user_update():
+    """
+        Testing R3-2: A postal code should be non-empty, alphanumeric only,
+        and no special characters such as !.
+    """
+    user = update_user("test9@test.com", "goodPass.123", "test9@test.com",
+                       "u8", "8 Songwood Drive", "")
+    assert user is None
+
+    user = update_user("test9@test.com", "goodPass.123", "test9@test.com",
+                       "u8", "8 Songwood Drive", "M9M !X3")
+    assert user is None
+
+
+def test_r3_3_user_update():
+    """
+        Testing R3-3: Postal code has to be a valid Canadian postal code.
+    """
+    user = update_user("test9@test.com", "goodPass.123", " ",
+                       "u8", "8 Songwood Drive", "m9M 1X3")
+    assert user is None
+
+    user = update_user("test9@test.com", "goodPass.123", " ",
+                       "u8", "8 Songwood Drive", "M9M 2X3")
+    assert user is not None
+
+
+def test_r3_4_user_update():
+    """
+        Testing R3-4: User name follows the requirements above.
+    """
+    user = update_user("test91@test.com", "goodPass.123", "test912@test.com",
+                       " u!8", "8 Songwood Drive", "M9M 1X3")
+    assert user is None
+
+    user = update_user("test912@test.com", "goodPass.123", " ",
+                       "user81", "8 Songwood Drive", "M9M 1X3")
+    assert user is not None
+
+    user = update_user("test912@test.com", "goodPass.123", " ",
+                       " ", "8 Songwood Drive", "M9M 1X3")
     assert user is not None
