@@ -1,4 +1,5 @@
 from qbay.models import register, login, User, update_user
+from qbay.models import Listing, create_listing, update_listing
 
 
 def test_r1_1_user_register():
@@ -246,3 +247,233 @@ def test_r3_4_user_update():
     user = update_user("test912@test.com", "goodPass.123", " ",
                        " ", "8 Songwood Drive", "M9M 1X3")
     assert user is not None
+
+
+def test_r4_1_create_listing():
+    """
+        Testing R4-1: Title of the product has to be alphanumeric only
+        and space only allowed if it is not suffix or prefix.
+    """
+    #  create user for testing
+    user = register("listuser", "list@test.com", "Password123!")
+
+    #  create a succussful listing associated with user
+    listing_1 = create_listing("list@test.com", "Password123!",
+                               "This is an example title",
+                               "This is an example description", 45)
+    assert listing_1 is not None
+
+    #  create a listing with special characters in title
+    listing_2 = create_listing("list@test.com", "Password123!",
+                               "Title!", "Description", 55)
+    assert listing_2 is None
+
+    #  create listing with " " as prefix
+    listing_3 = create_listing("list@test.com", "Password123!",
+                               " Title", "Description", 22)
+    assert listing_3 is None
+
+    #  create listing with " " as suffix
+    listing_4 = create_listing("list@test.com", "Password123!",
+                               "Title ", "Description", 44)
+    assert listing_4 is None
+
+
+def test_r4_2_create_listing():
+    """
+        Testing R4-2: Title of the product is no longer than
+        80 characters.
+    """
+    #  create user for testing
+    user = register("listuser", "list2@test.com", "Password123!")
+
+    #  create listing with title > 80 characters
+    listing_1 = create_listing("list2@test.com", "Password123!",
+                               """komswywqqvtebilemnptxvtdwquydxjicytrjgufbrxbt
+                lvupibxhweefktvijvvihuotjnjgqwgwzsw""",
+                               "Description", 55)
+    assert listing_1 is None
+
+    #  create listing with empty title
+    listing_2 = create_listing("list2@test.com", "Password123!",
+                               "",
+                               "Description", 55)
+    assert listing_2 is None
+
+
+def test_r4_3_create_listing():
+    """
+        Testing R4-3: The description of a product can be
+        arbitrary characters, with a minimum length of 20
+        characters and a maximum of 2000 characters
+    """
+    #  create user for testing
+    user = register("listuser", "list3@test.com", "Password123!")
+
+    #  create listing with description < 20 characters
+    listing_1 = create_listing("list3@test.com", "Password123!",
+                               "Title",
+                               "f", 55)
+    assert listing_1 is None
+
+
+def test_r4_4_create_listing():
+    """
+        Testing R4-4: The description of a product must be
+        longer than the title.
+    """
+    #  create user for testing
+    user = register("listuser", "list4@test.com", "Password123!")
+
+    #  create title longer than 20 characters and short description
+    listing_1 = create_listing("list4@test.com", "Password123!",
+                               "This is a very long title longer than "
+                               "description",
+                               "Only 23 characters here", 55)
+    assert listing_1 is None
+
+
+def test_r4_5_create_testing():
+    """
+        Testing R4-5: Price has to be of range 10 to 10000.
+    """
+    #  create user for testing
+    user = register("listuser", "list5@test.com", "Password123!")
+
+    #  create listing with price less than 10
+    listing_1 = create_listing("list5@test.com", "Password123!",
+                               "Example Title",
+                               "Only 23 characters here", 5)
+    assert listing_1 is None
+
+    #  create listing with price greater than 10000
+    listing_2 = create_listing("list5@test.com", "Password123!",
+                               "Anothher Example Title",
+                               "Only 23 characters here", 12000)
+    assert listing_2 is None
+
+
+def test_r4_7_create_testing():
+    """
+        Testing R4-7: owner_email cannot be empty.
+        The owner of a corresponding product must exist in
+        the database.
+    """
+    #  create user for testing
+    user = register("listuser", "list7@test.com", "Password123!")
+
+    #  create listing with empty email
+    listing_1 = create_listing("", "Password123!",
+                               "Example Title",
+                               "Only 23 characters here", 15)
+    assert listing_1 is None
+
+    #  create listing with non-existent user
+    listing_2 = create_listing("list51@test.com", "Password123!",
+                               "Anothher Example Title",
+                               "Only 23 characters here", 33)
+    assert listing_2 is None
+
+
+def test_r4_8_create_listing():
+    """
+        Testing R4-8: User cannot have products that contain the 
+        same title.
+    """
+    #  create listing with same title from same user already in db
+    listing_1 = create_listing("list@test.com", "Password123!",
+                               "This is an example title",
+                               "This is an example description, copied from "
+                               "above",
+                               45)
+    assert listing_1 is None
+
+
+def test_r5_1_update_listing():
+    """
+        Testing R5-1: One can update all attributes of the listing, except
+        owner_id and last_modified_date.
+    """
+    #  find an existing listing
+    listing = Listing.query.filter_by(owner_id="list@test.com").first()
+
+    #  update an existing listing title
+    listing_1 = update_listing("list@test.com", "Password123!", listing.id,
+                               "This is a new updated title", True, "", False,
+                               0, False)
+    assert listing_1 is not None
+
+    #  update an existing listing title, but longer than description
+    listing_2 = update_listing("list@test.com", "Password123!", listing.id,
+                               "This is a new updated title but it will be "
+                               "waaaaaaaay too long",
+                               True, "", False, 0, False)
+    assert listing_2 is None
+
+    #  update an existing listing title, but title contains illegal characters
+    listing_3 = update_listing("list@test.com", "Password123!", listing.id,
+                               "This is a new updated title, but it will be "
+                               "waaaaaaaay too long",
+                               True, "", False, 0, False)
+    assert listing_3 is None
+
+    #  update an existing listing title, but don't update title
+    listing_4 = update_listing("list@test.com", "Password123!", listing.id,
+                               "This is a new updated title, but it will be "
+                               "waaaaaaaay too long",
+                               False, "", False, 0, False)
+    assert listing_4 is not None
+
+
+def test_r5_2_update_listing():
+    """
+        Testing R5-2: Price can only be increased not decreased.
+    """
+    #  find an existing listing
+    listing = Listing.query.filter_by(owner_id="list@test.com").first()
+
+    #  update only the price, subtract 1 from it
+    listing_1 = update_listing("list@test.com", "Password123!", listing.id,
+                               "", False, "", False, listing.price - 1, True)
+    assert listing_1 is None
+
+    #  update only the price, increase it
+    listing_2 = update_listing("list@test.com", "Password123!", listing.id,
+                               "", False, "", False, 1000, True)
+    assert listing_2 is not None
+
+
+def test_r5_4_update_listing():
+    """
+        Testing R5-4: When updating an attribute, one has to make sure
+        that it follows the same requirements above.
+    """
+    #  find an existing listing
+    listing = Listing.query.filter_by(owner_id="list@test.com").first()
+
+    #  update the title and description 
+    listing_1 = update_listing("list@test.com", "Password123!", listing.id,
+                               "This is the new title it will be long", True,
+                               "description short", True, 0, False)
+    assert listing_1 is None
+
+    #  update title but it contains " " prefix
+    listing_2 = update_listing("list@test.com", "Password123!", listing.id,
+                               " This is the new title it will be long", True,
+                               "", False, 0, False)
+    assert listing_1 is None
+
+    #  update only the description, but it will be too short
+    listing_3 = update_listing("list@test.com", "Password123!", listing.id,
+                               " ", False, "d", True, 0, False)
+    assert listing_1 is None
+
+    #  update the price but it will be out of range
+    listing_4 = update_listing("list@test.com", "Password123!", listing.id,
+                               " ", False, " ", False, 120000, True)
+    assert listing_4 is None
+
+    #  update the price but it will be out of range
+    listing_5 = update_listing("list@test.com", "Password123!", listing.id,
+                               " ", False, " ", False, 1, True)
+    assert listing_5 is None
