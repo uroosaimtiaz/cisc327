@@ -8,6 +8,7 @@ from qbay.cli import login_page, register_page
     listings, view profile, edit profile, etc.
 '''
 
+
 def main():
     '''
         This screen prompts the user to register by providing

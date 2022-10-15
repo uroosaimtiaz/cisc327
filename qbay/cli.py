@@ -1,9 +1,12 @@
 from qbay.models import login, register
 
 '''
-    This file creates the different screens a user
-    will use to navigate the site.
+    This file creates the different screens or pages a user
+    will use to interact with the database, including
+    creating an account, logging in, creating a listing
+    and more.
 '''
+
 
 def login_page():
     '''
@@ -25,7 +28,7 @@ def register_page():
     '''
     print('\nThank you for registering with qb&b.\n')
     #  get username from user input
-    name = input ('Please enter a valid username: ')
+    name = input('Please enter a valid username: ')
     #  get email from user input
     email = input('Please enter a valid email address: ')
     #  get password from user input

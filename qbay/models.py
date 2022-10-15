@@ -126,7 +126,8 @@ def register(name, email, password):
     if upper_count <= 0 or lower_count <= 0 or special_count <= 0 or \
             len(password) < 6:
         print("Password must be at least 6 characters long, and inlude an"
-            "uppercase character, lowercase character, and a special character. \n")
+              "uppercase character, lowercase character, and"
+              "a special character. \n")
         return False
 
     # length username
@@ -140,7 +141,7 @@ def register(name, email, password):
 
     if name[0] == " " or name[-1] == " " or temp_name.isalnum() is not True:
         print("Username can only contain alphanumeric characters and"
-        " cannot begin or end with a ' '. \n")
+              " cannot begin or end with a ' '. \n")
         return False
 
     # create a new user
