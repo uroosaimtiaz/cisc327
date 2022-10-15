@@ -101,7 +101,7 @@ def register(name, email, password):
     # check if the email has been used:
     existed = User.query.filter_by(email=email).all()
     if len(existed) > 0:
-        print("existed1")
+        print("User with email already exists.")
         return False
 
     #  validating the email follows RFC 5322
@@ -125,12 +125,13 @@ def register(name, email, password):
 
     if upper_count <= 0 or lower_count <= 0 or special_count <= 0 or \
             len(password) < 6:
-        print("not long enough")
+        print("Password must be at least 6 characters long, and inlude an"
+            "uppercase character, lowercase character, and a special character. \n")
         return False
 
     # length username
     if len(name) <= 2 or len(name) >= 20:
-        print("not long enough")
+        print("Username must be between 3-19 characters long.\n")
         return False
 
     # checking username requirements
@@ -138,7 +139,8 @@ def register(name, email, password):
     temp_name = name.replace(" ", "")
 
     if name[0] == " " or name[-1] == " " or temp_name.isalnum() is not True:
-        print("name error")
+        print("Username can only contain alphanumeric characters and"
+        " cannot begin or end with a ' '. \n")
         return False
 
     # create a new user
@@ -147,9 +149,8 @@ def register(name, email, password):
     db.session.add(user)
     # generate random ID for user
     user.id = str(uuid.uuid1())
-    print("Printing the user id: ", user.id)
     user.balance = 100
-    print("added 100")
+    print("\nRegistration Gift: We have given you a credit of $100 dollars.")
 
     # actually save the object
     db.session.commit()
@@ -189,7 +190,7 @@ def login(email, password):
 
     if upper_count <= 0 or lower_count <= 0 or special_count <= 0 or \
             len(password) < 6:
-        print("password invalid")
+        print("Password invalid.")
         return None
 
     valids = User.query.filter_by(email=email, password=password).all()
