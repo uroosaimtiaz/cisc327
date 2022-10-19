@@ -546,14 +546,16 @@ def update_listing(email, password, id, title, utitle, description,
     db.session.commit()
     return listing
 
+
 def get_users():
     print("Users: \n")
     for user in User.query.all():
         print(user.username)
 
+
 def get_listings(owner_id):
     print("Listings: \n")
-    if(owner_id):
+    if (owner_id):
         for listing in Listing.query.filter_by(owner_id=owner_id).all():
             print(listing.title + ": " + listing.id)
         print('\n')
@@ -561,6 +563,7 @@ def get_listings(owner_id):
         for listing in Listing.query.all():
             print(listing.title + ": " + listing.id)
         print('\n')
+
 
 def return_user_listings(owner_email):
     return Listing.query.filter_by(owner_id=owner_email).all()

@@ -16,7 +16,7 @@ def main():
         This screen prompts the user to register by providing
         a valid username, email, and password.
     '''
-    while user == None:
+    while user is None:
         selection = input(
             '\nWelcome to qb&b! \n \n'
             '1. Register \n' 
@@ -39,7 +39,7 @@ def main():
             print('Thanks for visiting!')
             break
 
-    while user != None:
+    while user is not None:
         selection = input(
             f'You are signed in as {user.username}\n \n'
             '1. Log out \n'
@@ -57,6 +57,7 @@ def main():
             user = None
             print('Thanks for visiting!')
             break
+
 
 def home_page(user):
     while True:
@@ -79,6 +80,7 @@ def home_page(user):
             update_listing_page(user.email, user.password)
         elif selection == '5':
             break
+
 
 if __name__ == '__main__':
     main()
