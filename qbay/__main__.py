@@ -1,6 +1,7 @@
 from qbay import *
 from qbay.cli import login_page, register_page, print_all_listings
-from qbay.cli import login_page, create_listing_page, update_listing_page
+from qbay.cli import login_page, create_listing_page, update_listing_page, \
+    update_profile_page
 
 '''
     This main file will create a main menu that takes
@@ -21,7 +22,8 @@ def main():
             '\nWelcome to qb&b! \n \n'
             '1. Register \n' 
             '2. Login \n'
-            '3. Exit \n \n'
+            '3. Update Profile \n'
+            '4. Exit \n \n'
             'Please select one of the options above: ')
         selection = selection.strip()
         if selection == '1':
@@ -36,6 +38,8 @@ def main():
                 print('Login failed. ')
         elif selection == '3':
             user = None
+            update_profile_page()
+        elif selection == '4':
             print('Thanks for visiting!')
             break
 
