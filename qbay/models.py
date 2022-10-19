@@ -126,10 +126,11 @@ def register(name, email, password):
     if upper_count <= 0 or lower_count <= 0 or special_count <= 0 or \
             len(password) < 6:
         print("Password must be at least 6 characters long, and inlude an"
-              "uppercase character, lowercase character, and"
+              " uppercase character, lowercase character, and"
               "a special character. \n")
         return False
 
+    print("passed")
     # length username
     if len(name) <= 2 or len(name) >= 20:
         print("Username must be between 3-19 characters long.\n")
@@ -422,6 +423,7 @@ def update_listing(email, password, id, title, utitle, description,
         Parameters:
         email (string):         email of the owner
         password (string):      password of the owner
+        id (string):            The ID of the listing
         title (string):         listing title
         description (string):   listing description
         price (integer):        listing price
@@ -543,3 +545,22 @@ def update_listing(email, password, id, title, utitle, description,
 
     db.session.commit()
     return listing
+
+def get_users():
+    print("Users: \n")
+    for user in User.query.all():
+        print(user.username)
+
+def get_listings(owner_id):
+    print("Listings: \n")
+    if(owner_id):
+        for listing in Listing.query.filter_by(owner_id=owner_id).all():
+            print(listing.title + ": " + listing.id)
+        print('\n')
+    else:
+        for listing in Listing.query.all():
+            print(listing.title + ": " + listing.id)
+        print('\n')
+
+def return_user_listings(owner_email):
+    return Listing.query.filter_by(owner_id=owner_email).all()

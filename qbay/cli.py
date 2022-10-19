@@ -1,4 +1,5 @@
-from qbay.models import login, register
+from qbay.models import get_listings, register, get_users, create_listing, update_listing
+from qbay.models import login, return_user_listings
 
 '''
     This file creates the different screens or pages a user
@@ -44,3 +45,82 @@ def register_page():
     #  if register returns False then registration failed
     else:
         print('Registration failed.')
+
+def create_listing_page(email, password):
+    '''
+        This screen prompts the user to create a listing by providing
+        a valid title, description, and price.
+    '''
+    print('\nThank you for creating a listing with qb&b.\n')
+    
+    title = ""
+    while len(title) < 1:
+        title = input('Please enter a valid title for the listing: ')
+    
+    desc = input('Please enter a valid description for the listing: ')
+    while len(desc) < 20:
+        desc = input('Description must be over 20 characters.\n'
+        'Please enter a valid description for the listing: ')
+    
+    price = int(input('Please enter a valid price for the listing: '))
+    while price < 10:
+        price = int(input('Price must be at least 10.\n'
+        'Please enter a valid price for the listing: '))
+    
+    if(create_listing(email, password, title, desc, price)):
+        print("Listing created successfully")
+    else:
+        print("Listing creation FAILED")
+
+def update_listing_page(email, password):
+    '''
+        This screen prompts the user to update their listing by providing
+        a valid title, description, and price.
+    '''
+    listings = return_user_listings(email)
+    if(len(listings) == 0):
+        print("This user has no existing listings")
+    else:
+        print('Here are all the listings associated with this user: \n')
+        for i in range(len(listings)):
+            print(f'{(i + 1)}. {listings[i].title}')
+        selection = int(input('Please select the listing you want to update:'))
+        if(selection > 0 and selection <= len(listings)):
+            print(f'you selected {listings[(selection - 1)].title}')
+            
+            utitle = input('if you wish to modify the title, '
+            'enter here (if you leave it blank it wont change):')
+            udesc = input('if you wish to modify the description, '
+            'enter here (if you leave it blank it wont change):')
+            uprice = input('if you wish to modify the price, '
+            'enter here (if you leave it blank it wont change):')
+            if len(utitle.strip) == 0:
+                utitle = None
+            if len(udesc.strip) == 0:
+                udesc = None
+            if len(uprice.strip) == 0:
+                uprice = None
+            else:
+                uprice = int(uprice)
+
+            update_listing(email, password, listings[(selection -1)].id, 
+            listings[(selection -1)].title, utitle, 
+            listings[(selection -1)].description, udesc, 
+            listings[(selection -1)].price, uprice)
+            
+        else:
+            print("\nInvalid input.\n")
+
+def print_all_users():
+    '''
+        function to assist with testing the database.
+        it will print all current users in the database
+    '''
+    get_users()
+
+def print_all_listings(owner_id=None):
+    '''
+        function to assist with testing the database.
+        it will print all current listings in the database
+    '''
+    get_listings(owner_id)
