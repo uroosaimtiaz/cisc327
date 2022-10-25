@@ -22,8 +22,7 @@ def main():
             '\nWelcome to qb&b! \n \n'
             '1. Register \n' 
             '2. Login \n'
-            '3. Update Profile \n'
-            '4. Exit \n \n'
+            '3. Exit \n \n'
             'Please select one of the options above: ')
         selection = selection.strip()
         if selection == '1':
@@ -37,9 +36,6 @@ def main():
             else:
                 print('Login failed. ')
         elif selection == '3':
-            user = None
-            update_profile_page()
-        elif selection == '4':
             print('Thanks for visiting!')
             break
 
@@ -48,7 +44,8 @@ def main():
             f'You are signed in as {user.username}\n \n'
             '1. Log out \n'
             '2. Home Page \n'
-            '3. Exit \n \n'
+            '3. Update Profile\n'
+            '4. Exit \n \n'
             'Please select one of the options above: ')
         selection = selection.strip()
         if selection == '1':
@@ -58,6 +55,8 @@ def main():
         elif selection == '2':
             home_page(user)
         elif selection == '3':
+            update_profile_page()
+        elif selection == '4':
             user = None
             print('Thanks for visiting!')
             break

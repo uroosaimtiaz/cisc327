@@ -49,10 +49,10 @@ def register_page():
 
 
 def create_listing_page(email, password):
-    '''
+    """
         This screen prompts the user to create a listing by providing
         a valid title, description, and price.
-    '''
+    """
     print('\nThank you for creating a listing with qb&b.\n')
     
     title = ""
@@ -76,10 +76,10 @@ def create_listing_page(email, password):
 
 
 def update_listing_page(email, password):
-    '''
+    """
         This screen prompts the user to update their listing by providing
         a valid title, description, and price.
-    '''
+    """
     listings = return_user_listings(email)
     if len(listings) == 0:
         print("This user has no existing listings")
@@ -116,18 +116,18 @@ def update_listing_page(email, password):
 
 
 def print_all_users():
-    '''
+    """
         function to assist with testing the database.
         it will print all current users in the database
-    '''
+    """
     get_users()
 
 
 def print_all_listings(owner_id=None):
-    '''
+    """
         function to assist with testing the database.
         it will print all current listings in the database
-    '''
+    """
     get_listings(owner_id)
 
 
@@ -187,9 +187,10 @@ def update_profile_page():
                     "Please enter a valid new billing address: ")
             else:
                 # updating postal code
-                new_postal_code = input("Please enter a valid new postal code: ")
+                new_postal_code = input("Please enter a valid new postal "
+                                        "code: ")
 
-            # prompting the user if they would like to update a different option
+            # prompting the user if they would like to update different option
             add_option = input("\nWould you like to update another option "
                                "('y'/'n')?: ")
             if add_option == 'y':
