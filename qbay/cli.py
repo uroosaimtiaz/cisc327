@@ -144,7 +144,7 @@ def update_profile_page():
     print("Welcome to the update profile page!\n")
 
     # User login required for update_user from models.py for validation
-    print("Provide your login information. If it is wrong, we will not be"
+    print("Provide your login information. If it is wrong, we will not be "
           "able to update your account.")
 
     # getting the current email
@@ -153,47 +153,53 @@ def update_profile_page():
     # getting the corresponding password to that account
     password = input("Please enter your password: ")
 
-    print("Welcome to the update profile page!\n")
-    print("**********************************")
-    print("*         UPDATE MENU            *")
-    print("*   1 - Update Username          *")
-    print("*   2 - Update Email             *")
-    print("*   3 - Billing address          *")
-    print("*   4 - Update Postal Code       *")
-    print("**********************************\n\n")
+    # checking if user exists in the first part of update_user
+    # returns None if user does not exist
+    user_info = update_user(old_email, password, new_email, new_name,
+                            new_billing_address, new_postal_code)
 
-    continue_updating = True  # used to check if user wants to update more
+    if user_info is not None:
+        print("Welcome to the update profile page!\n")
+        print("**********************************")
+        print("*         UPDATE MENU            *")
+        print("*   1 - Update Username          *")
+        print("*   2 - Update Email             *")
+        print("*   3 - Billing address          *")
+        print("*   4 - Update Postal Code       *")
+        print("**********************************\n\n")
 
-    while continue_updating:
-        selection = input("Which information would you like to update: ")
+        continue_updating = True  # used to check if user wants to update more
 
-        if selection == '1':
-            # updating username
-            new_name = input(
-                "Please enter a valid new username: ")
-        elif selection == '2':
-            # updating email
-            new_email = input(
-                "Please enter a valid new email: ")
-        elif selection == '3':
-            # updating Billing Address
-            new_billing_address = input(
-                "Please enter a valid new billing address: ")
-        else:
-            # updating postal code
-            new_postal_code = input("Please enter a valid new postal code: ")
+        while continue_updating:
+            selection = input("Which information would you like to update: ")
 
-        # prompting the user if they would like to update a different option
-        add_option = input("\nWould you like to update another option "
-                           "('y'/'n')?: ")
-        if add_option == 'y':
-            # will allow user to choose another option to update
-            continue_updating = True
-        else:
-            # user has finished updating
-            continue_updating = False
+            if selection == '1':
+                # updating username
+                new_name = input(
+                    "Please enter a valid new username: ")
+            elif selection == '2':
+                # updating email
+                new_email = input(
+                    "Please enter a valid new email: ")
+            elif selection == '3':
+                # updating Billing Address
+                new_billing_address = input(
+                    "Please enter a valid new billing address: ")
+            else:
+                # updating postal code
+                new_postal_code = input("Please enter a valid new postal code: ")
 
-    #  updating the profile
-    update_user(old_email, password, new_email, new_name,
-                new_billing_address,
-                new_postal_code)
+            # prompting the user if they would like to update a different option
+            add_option = input("\nWould you like to update another option "
+                               "('y'/'n')?: ")
+            if add_option == 'y':
+                # will allow user to choose another option to update
+                continue_updating = True
+            else:
+                # user has finished updating
+                continue_updating = False
+
+        #  updating the profile
+        update_user(old_email, password, new_email, new_name,
+                    new_billing_address,
+                    new_postal_code)

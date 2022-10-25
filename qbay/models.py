@@ -241,7 +241,8 @@ def update_user(old_email, password, new_email, new_name, new_billing_address,
         # new user email is updated
         user.email = new_email
     else:
-        print("Email not changed")
+        # email not changed
+        pass
 
     # new username must be between 2 and 20 characters long
     if 20 <= len(new_name) <= 2 and new_name != " ":
@@ -254,7 +255,8 @@ def update_user(old_email, password, new_email, new_name, new_billing_address,
     # new username cannot have a " " as prefix or suffix
     # new username cannot contain non-alphanumeric characters besides " "
     if new_name == " ":
-        print("username not changed")
+        # username not changed
+        pass
     elif len(new_name) >= 2 and new_name[0] == " " or new_name[-1] == " " or \
             temp_name.isalnum() is not True:
         print("New username cannot contain spaces as prefix or suffix.")
@@ -265,13 +267,15 @@ def update_user(old_email, password, new_email, new_name, new_billing_address,
 
     # new user billing address is updated
     if new_billing_address == " ":
-        print("Billing address not changed")
+        # billing address not changed
+        pass
     else:
         user.billing_address = new_billing_address
 
     # new postal code but be valid CDN postal code
     if new_postal_code == " ":
-        print("postal code not changed")
+        # postal code not changed
+        pass
     elif len(new_postal_code) != 7:
         print("Postal code must be 7 characters.")
         return None
