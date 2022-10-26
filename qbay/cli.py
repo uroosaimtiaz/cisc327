@@ -1,5 +1,6 @@
 from qbay.models import get_listings, register, get_users, create_listing
-from qbay.models import login, return_user_listings, update_listing
+from qbay.models import login, return_user_listings, update_listing, \
+    update_user
 
 '''
     This file creates the different screens or pages a user
@@ -10,10 +11,10 @@ from qbay.models import login, return_user_listings, update_listing
 
 
 def login_page():
-    '''
+    """
         This screen prompts the user to login to their
         account by entering their username and password.
-    '''
+    """
     #  get email from user input
     email = input('Please enter your email: ')
     #  get password from user input
@@ -23,10 +24,10 @@ def login_page():
 
 
 def register_page():
-    '''
+    """
         This screen prompts the user to register by providing
         a valid username, email, and password.
-    '''
+    """
     print('\nThank you for registering with qb&b.\n')
     #  get username from user input
     name = input('Please enter a valid username: ')
@@ -48,10 +49,10 @@ def register_page():
 
 
 def create_listing_page(email, password):
-    '''
+    """
         This screen prompts the user to create a listing by providing
         a valid title, description, and price.
-    '''
+    """
     print('\nThank you for creating a listing with qb&b.\n')
     
     title = ""
@@ -75,10 +76,10 @@ def create_listing_page(email, password):
 
 
 def update_listing_page(email, password):
-    '''
+    """
         This screen prompts the user to update their listing by providing
         a valid title, description, and price.
-    '''
+    """
     listings = return_user_listings(email)
     if len(listings) == 0:
         print("This user has no existing listings")
@@ -115,16 +116,91 @@ def update_listing_page(email, password):
 
 
 def print_all_users():
-    '''
+    """
         function to assist with testing the database.
         it will print all current users in the database
-    '''
+    """
     get_users()
 
 
 def print_all_listings(owner_id=None):
-    '''
+    """
         function to assist with testing the database.
         it will print all current listings in the database
-    '''
+    """
     get_listings(owner_id)
+
+
+def update_profile_page():
+    """
+        This screen prompts the user to update their information.
+    """
+
+    new_name = " "
+    new_email = " "
+    new_billing_address = " "
+    new_postal_code = " "
+
+    print("Welcome to the update profile page!\n")
+
+    # User login required for update_user from models.py for validation
+    print("Provide your login information. If it is wrong, we will not be "
+          "able to update your account.")
+
+    # getting the current email
+    old_email = input("Please enter your current email: ")
+
+    # getting the corresponding password to that account
+    password = input("Please enter your password: ")
+
+    # checking if user exists in the first part of update_user
+    # returns None if user does not exist
+    user_info = update_user(old_email, password, new_email, new_name,
+                            new_billing_address, new_postal_code)
+
+    if user_info is not None:
+        print("Welcome to the update profile page!\n")
+        print("**********************************")
+        print("*         UPDATE MENU            *")
+        print("*   1 - Update Username          *")
+        print("*   2 - Update Email             *")
+        print("*   3 - Billing address          *")
+        print("*   4 - Update Postal Code       *")
+        print("**********************************\n\n")
+
+        continue_updating = True  # used to check if user wants to update more
+
+        while continue_updating:
+            selection = input("Which information would you like to update: ")
+
+            if selection == '1':
+                # updating username
+                new_name = input(
+                    "Please enter a valid new username: ")
+            elif selection == '2':
+                # updating email
+                new_email = input(
+                    "Please enter a valid new email: ")
+            elif selection == '3':
+                # updating Billing Address
+                new_billing_address = input(
+                    "Please enter a valid new billing address: ")
+            else:
+                # updating postal code
+                new_postal_code = input("Please enter a valid new postal "
+                                        "code: ")
+
+            # prompting the user if they would like to update different option
+            add_option = input("\nWould you like to update another option "
+                               "('y'/'n')?: ")
+            if add_option == 'y':
+                # will allow user to choose another option to update
+                continue_updating = True
+            else:
+                # user has finished updating
+                continue_updating = False
+
+        #  updating the profile
+        update_user(old_email, password, new_email, new_name,
+                    new_billing_address,
+                    new_postal_code)
