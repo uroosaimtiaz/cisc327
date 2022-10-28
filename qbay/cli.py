@@ -77,8 +77,9 @@ def create_listing_page(email, password):
 
 def update_listing_page(email, password):
     """
-        This screen prompts the user to update their listing by providing
-        a valid title, description, and price.
+        This screen prompts the user to choose a listing and decide
+        what attributes of the listing they would like to change and
+        make updates by providing a valid title, description, and price.
     """
     listings = return_user_listings(email)
     if len(listings) == 0:
@@ -91,25 +92,24 @@ def update_listing_page(email, password):
         if selection > 0 and selection <= len(listings):
             print(f'you selected {listings[(selection - 1)].title}')
             
-            utitle = input('if you wish to modify the title, enter here '
-                           '(if you leave it blank it wont change):')
-            udesc = input('if you wish to modify the description, enter here'
-                          ' (if you leave it blank it wont change):')
-            uprice = input('if you wish to modify the price, enter here '
-                           '(if you leave it blank it wont change):')
-            if len(utitle.strip) == 0:
-                utitle = None
-            if len(udesc.strip) == 0:
-                udesc = None
-            if len(uprice.strip) == 0:
-                uprice = None
-            else:
-                uprice = int(uprice)
+            utitle = input('Modify Title? Enter 1 [Yes] or 2 [No]: ')
+            if int(utitle.strip()) == 1:
+                newTitle = input('Enter new Title: ')
+                update_listing(email, password, listings[(selection - 1)].id,
+                               newTitle, True, '', False, '', False)
 
-            update_listing(email, password, listings[(selection - 1)].id, 
-                           listings[(selection - 1)].title, utitle, 
-                           listings[(selection - 1)].description, udesc, 
-                           listings[(selection - 1)].price, uprice)
+            udesc = input('Modify Description? Enter 1 [Yes] or 2 [No]: ')
+            if int(udesc.strip()) == 1:
+                newDesc = input('Enter new description: ')
+                update_listing(email, password, listings[(selection - 1)].id,
+                               '', False, newDesc, True, '', False)
+
+            uprice = input('Modify Price? Enter 1 [Yes] or 2 [No]: ')
+            if int(uprice.strip()) == 1:
+                newPrice = input('Enter new Price: ')
+                update_listing(email, password, listings[(selection - 1)].id,
+                               '', False, '', False, 
+                               int(newPrice.strip()), True)
 
         else:
             print("\nInvalid input.\n")
