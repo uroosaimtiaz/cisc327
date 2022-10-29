@@ -564,7 +564,7 @@ def get_users():
 
 def get_listings(owner_id):
     print("Listings: \n")
-    if (owner_id):
+    if owner_id:
         for listing in Listing.query.filter_by(owner_id=owner_id).all():
             print(listing.title + ": " + listing.id)
         print('\n')
