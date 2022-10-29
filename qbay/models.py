@@ -300,7 +300,6 @@ def update_user(old_email, password, new_email, new_name, new_billing_address,
     elif not new_postal_code[6] in "0123456789":
         print("invalid postal code")
         return None
-
     else:
         # new user postal code is updated
         user.postal_code = new_postal_code
@@ -434,8 +433,12 @@ def update_listing(email, password, id, title, utitle, description,
         password (string):      password of the owner
         id (string):            The ID of the listing
         title (string):         listing title
+        utitle (boolean):       true if title update request
         description (string):   listing description
+        udescription (boolean): true if desc update request
         price (integer):        listing price
+        uprice (boolean):       true if price update request
+        
         Returns:
         Listing if successfully updated or None
     """
@@ -455,7 +458,6 @@ def update_listing(email, password, id, title, utitle, description,
 
     # code will only execute if request title update
     if utitle:
-        print("Title update requested.")
         # title must be between 1 and 80 characters
         if len(title) > 80:
             print("Incorrect Title length.")
@@ -488,10 +490,9 @@ def update_listing(email, password, id, title, utitle, description,
 
         # update title
         listing.title = title
+        print("Title updated.")
 
     if udescription:
-        print("Description update requested.")
-
         # description must be between 20 and 2000 characters
         if len(description) > 2000:
             print("Description is incorrect length.")
@@ -512,10 +513,9 @@ def update_listing(email, password, id, title, utitle, description,
 
         # update description
         listing.description = description
+        print("Description updated.")
 
     if uprice:
-        print("Price update requested.")
-
         # price has to be between 10 and 10000
         if price > 10000:
             print("Price out of range")
@@ -531,11 +531,11 @@ def update_listing(email, password, id, title, utitle, description,
 
         # update price
         listing.price = price
+        print("Price updated.")
 
     # today date must be after 2021-01-02
     # and before 2025-01-02
     today = date.today()
-    print(today)
     if 2025 < today.year < 2021:
         print("Year out of range.")
         return None
