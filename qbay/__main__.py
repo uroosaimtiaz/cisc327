@@ -20,7 +20,7 @@ def main():
     while user is None:
         selection = input(
             '\nWelcome to qb&b! \n \n'
-            '1. Register \n' 
+            '1. Register \n'
             '2. Login \n'
             '3. Exit \n \n'
             'Please select one of the options above: ')
