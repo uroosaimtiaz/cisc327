@@ -89,7 +89,7 @@ def update_listing_page(email, password):
         for i in range(len(listings)):
             print(f'{(i + 1)}. {listings[i].title}')
         selection = int(input('Please select the listing you want to update:'))
-        if selection > 0 and selection <= len(listings):
+        if 0 < selection <= len(listings):
             print(f'you selected {listings[(selection - 1)].title}')
             
             utitle = input('Modify Title? Enter 1 [Yes] or 2 [No]: ')
