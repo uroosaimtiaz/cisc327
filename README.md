@@ -14,9 +14,6 @@ Folder structure:
 │   └── workflows
 │       ├── pytest.yml       ======> CI settings for running test automatically (trigger test for commits/pull-requests)
 │       └── style_check.yml  ======> CI settings for checking PEP8 automatically (trigger test for commits/pull-requests)
-├── .gitignore
-├── A0-contract.md
-├── LICENSE
 ├── qbay                 ======> Application source code
 │   ├── __init__.py      ======> Required for a python module (can be empty)
 │   ├── __main__.py      ======> Program entry point
@@ -27,8 +24,10 @@ Folder structure:
 │   ├── conftest.py      ======> Code to run before/after all the testing
 │   ├── test_cli.py      ======> Testing code for cli.py
 │   └── test_models.py   ======> Testing code for models.py
+├── .gitignore
+├── A0-contract.md
+├── LICENSE
 ├── README.md
 ├── requirements.txt     ======> Dependencies
 └── scrumboard.png       ======> Scrum board screenshot
 ```
-
