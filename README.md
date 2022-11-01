@@ -4,8 +4,6 @@
 
 # Information 
 
-Current SCRUM Board Screenshot after sprint kickoff meeting in scrumboard.png.
-
 Folder structure:
 
 ```
@@ -31,3 +29,9 @@ Folder structure:
 ├── requirements.txt     ======> Dependencies
 └── scrumboard.png       ======> Scrum board screenshot
 ```
+
+# Scrum Board
+
+Current SCRUM Board Screenshot after sprint kickoff meeting in scrumboard.png.
+
+![SCRUM Board for A4](https://raw.github.com/uroosaimtiaz/cisc327/build-badge/scrumboard.png "Scrumboard")
