@@ -24,9 +24,9 @@ def test_register_r1():
     """
     # read expected in/out
     expected_in = open(current_folder.joinpath(
-    'test_register_r1.in'))
+                       'test_register_r1.in'))
     expected_out = open(current_folder.joinpath(
-    'test_register_r1.out')).read()
+                        'test_register_r1.out')).read()
 
     # pip the input
     output = subprocess.run(
@@ -90,9 +90,9 @@ def test_register_r3():
     """
     # read expected in/out
     expected_in = open(current_folder.joinpath(
-    'test_register_r3.in'))
+                       'test_register_r3.in'))
     expected_out = open(current_folder.joinpath(
-    'test_register_r3.out')).read()
+                        'test_register_r3.out')).read()
 
     # pip the input
     output = subprocess.run(
@@ -103,7 +103,6 @@ def test_register_r3():
 
     print('test_register_r3')
     assert output.strip() == expected_out.strip()
-    #assert output.strip() == output.strip()
 
 
 def test_register_r4():
@@ -131,9 +130,9 @@ def test_register_r4():
     """
     # read expected in/out
     expected_in = open(current_folder.joinpath(
-    'test_register_r4.in'))
+                       'test_register_r4.in'))
     expected_out = open(current_folder.joinpath(
-    'test_register_r4.out')).read()
+                        'test_register_r4.out')).read()
 
     # pip the input
     output = subprocess.run(
@@ -145,8 +144,6 @@ def test_register_r4():
     print('test_register_r4')
 
     assert output.strip() == expected_out.strip()
-    #assert output.strip() == output.strip()
-
 
 
 def test_register_r5_6():
@@ -172,9 +169,9 @@ def test_register_r5_6():
     """
     # read expected in/out
     expected_in = open(current_folder.joinpath(
-    'test_register_r5_6.in'))
+                       'test_register_r5_6.in'))
     expected_out = open(current_folder.joinpath(
-    'test_register_r5_6.out')).read()
+                        'test_register_r5_6.out')).read()
 
     # pip the input
     output = subprocess.run(
@@ -186,7 +183,6 @@ def test_register_r5_6():
     print('test_register_r5_6')
 
     assert output.strip() == expected_out.strip()
-    #assert output.strip() == output.strip()
 
 
 def test_register_r7():
@@ -200,12 +196,32 @@ def test_register_r7():
     Successfully create account with email. 
     Fail to create second account with same email.
 
+    R1-8: Shipping address is empty at the time of registration.
+
+    R1-9: Postal code is empty at the time of registration.
+
+    R1-10: Balance should be initialized as 100 at the time of
+    registration. (free $100 dollar signup bonus).
+
+    BlackBox Testing Method: None
+
+    Test Description:
+
+    At the time of registration, the shipping address and
+    postal code is automatically set to empty internally
+    and no user input is taken; user shipping address not
+    accessible to the user via frontend yet; therefore is not
+    included in frontend testing.
+    At the current time, there is no way to view user profile
+    with current balance from frontend therefore it is also
+    not included in testing.
+    BlackBox testing assumes no knowledge of internal tools.
     """
     # read expected in/out
     expected_in = open(current_folder.joinpath(
-    'test_register_r7.in'))
+                       'test_register_r7.in'))
     expected_out = open(current_folder.joinpath(
-    'test_register_r7.out')).read()
+                        'test_register_r7.out')).read()
 
     # pip the input
     output = subprocess.run(
@@ -217,32 +233,8 @@ def test_register_r7():
     print('test_register_r7')
 
     assert output.strip() == expected_out.strip()
-    #assert output.strip() == output.strip()
 
-'''
+
 def test_register_r8_9_10():
     """
-    R1-8: Shipping address is empty at the time of registration.
-
-    R1-9: Postal code is empty at the time of registration.
-
-    R1-10: Balance should be initialized as 100 at the time of 
-    registration. (free $100 dollar signup bonus).
-
-    BlackBox Testing Method: None
-
-    Test Description:
-        
-    At the time of registration, the shipping address and 
-    postal code is automatically set to empty internally 
-    and no user input is taken; user shipping address not 
-    accessible to the user via frontend yet; therefore is not
-    included in frontend testing.
-
-    At the current time, there is no way to view user profile
-    with current balance from frontend therefore it is also
-    not included in testing.
-
-    BlackBox testing assumes no knowledge of internal tools.
     """
-'''
