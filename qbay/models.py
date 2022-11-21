@@ -130,7 +130,6 @@ def register(name, email, password):
               "a special character. \n")
         return False
 
-    print("passed")
     # length username
     if len(name) <= 2 or len(name) >= 20:
         print("Username must be between 3-19 characters long.\n")
