@@ -1,0 +1,83 @@
+Welcome to qb&b! 
+ 
+1. Register 
+2. Login 
+3. Exit 
+ 
+Please select one of the options above: Please enter your email: Please enter your password: welcome newusername
+You are signed in as newusername
+ 
+1. Log out 
+2. Home Page 
+3. Update Profile
+4. Exit 
+ 
+Please select one of the options above: Welcome to the update profile page!
+
+Provide your login information. If it is wrong, we will not be able to update your account.
+Please enter your current email: Please enter your password: Welcome to the update profile page!
+
+**********************************
+*         UPDATE MENU            *
+*   1 - Update Username          *
+*   2 - Update Email             *
+*   3 - Billing address          *
+*   4 - Update Postal Code       *
+**********************************
+
+
+Which information would you like to update: Please enter a valid new postal code: 
+Would you like to update another option ('y'/'n')?: Postal code must be 7 characters.
+You are signed in as newusername
+ 
+1. Log out 
+2. Home Page 
+3. Update Profile
+4. Exit 
+ 
+Please select one of the options above: Welcome to the update profile page!
+
+Provide your login information. If it is wrong, we will not be able to update your account.
+Please enter your current email: Please enter your password: Welcome to the update profile page!
+
+**********************************
+*         UPDATE MENU            *
+*   1 - Update Username          *
+*   2 - Update Email             *
+*   3 - Billing address          *
+*   4 - Update Postal Code       *
+**********************************
+
+
+Which information would you like to update: Please enter a valid new postal code: 
+Would you like to update another option ('y'/'n')?: invalid postal code
+You are signed in as newusername
+ 
+1. Log out 
+2. Home Page 
+3. Update Profile
+4. Exit 
+ 
+Please select one of the options above: Welcome to the update profile page!
+
+Provide your login information. If it is wrong, we will not be able to update your account.
+Please enter your current email: Please enter your password: Welcome to the update profile page!
+
+**********************************
+*         UPDATE MENU            *
+*   1 - Update Username          *
+*   2 - Update Email             *
+*   3 - Billing address          *
+*   4 - Update Postal Code       *
+**********************************
+
+
+Which information would you like to update: Please enter a valid new postal code: 
+Would you like to update another option ('y'/'n')?: You are signed in as newusername
+ 
+1. Log out 
+2. Home Page 
+3. Update Profile
+4. Exit 
+ 
+Please select one of the options above: 
