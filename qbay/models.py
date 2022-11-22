@@ -168,6 +168,7 @@ def login(email, password):
       Returns:
         The user object if login succeeded otherwise None
     """
+    
     # validating the email follows RFC 5322
     try:
         validate_email(email).email
@@ -201,7 +202,7 @@ def login(email, password):
 
 
 def update_user(old_email, password, new_email, new_name, new_billing_address,
-                new_postal_code):
+                new_postal_code, menuItem):
     """
     Update User Profile
       Parameters:
@@ -215,6 +216,7 @@ def update_user(old_email, password, new_email, new_name, new_billing_address,
         The user object if user is able to login and make changes
         to email, username, billing address, and postal code.
     """
+
     # user must provide correct credentials to login
     user = login(old_email, password)
 
@@ -223,7 +225,7 @@ def update_user(old_email, password, new_email, new_name, new_billing_address,
         print("User does not exist or login unsuccessful.")
         return None
 
-    if new_email != " ":
+    if menuItem == 0 or menuItem == 2:
         # the new email requested cannot already be in use
         existed = User.query.filter_by(email=new_email).all()
         if len(existed) > 0:
@@ -239,69 +241,70 @@ def update_user(old_email, password, new_email, new_name, new_billing_address,
 
         # new user email is updated
         user.email = new_email
-    else:
-        # email not changed
-        pass
 
-    # new username must be between 2 and 20 characters long
-    if 20 <= len(new_name) <= 2 and new_name != " ":
-        print("New username cannot be empty or incorrect length.")
-        return None
+    if menuItem == 1 or menuItem == 0:
+        
+        if (len(new_name) == 0):
+            print('New username cannot be empty.')
+            return None
 
-    # remove all spaces in new username to use isalnum()
-    temp_name = new_name.replace(" ", "")
+        # new username must be between 2 and 20 characters long
+        if (len(new_name)) < 3 or (len(new_name) > 19):
+            print("New username must be 3-19 characters long.")
+            return None
 
-    # new username cannot have a " " as prefix or suffix
-    # new username cannot contain non-alphanumeric characters besides " "
-    if new_name == " ":
-        # username not changed
-        pass
-    elif len(new_name) >= 2 and new_name[0] == " " or new_name[-1] == " " or \
-            temp_name.isalnum() is not True:
-        print("New username cannot contain spaces as prefix or suffix.")
-        return None
-    else:
-        # new username is updated
-        user.username = new_name
+        # remove all spaces in new username to use isalnum()
+        temp_name = new_name.replace(" ", "")
 
-    # new user billing address is updated
-    if new_billing_address == " ":
-        # billing address not changed
-        pass
-    else:
+        # new username cannot have a " " as prefix or suffix
+        # new username cannot contain non-alphanumeric characters besides " "
+        if (len(new_name) >= 2) and (new_name[0] == " " or 
+                                     new_name[-1] == " "):
+            print("New username cannot contain spaces as prefix or suffix.")
+            return None
+        elif (temp_name.isalnum() is not True):
+            print("New username cannot contain non-alphanumeric characters.")
+            return None
+        else:
+            # new username is updated
+            user.username = new_name
+
+    if menuItem == 3 or menuItem == 0:
+        # new user billing address is updated
         user.billing_address = new_billing_address
 
-    # new postal code but be valid CDN postal code
-    if new_postal_code == " ":
-        # postal code not changed
-        pass
-    elif len(new_postal_code) != 7:
-        print("Postal code must be 7 characters.")
-        return None
-    elif not new_postal_code[0] in upper_characters:
-        print("invalid postal code")
-        return None
-    elif not new_postal_code[1] in "0123456789":
-        print("invalid postal code")
-        return None
-    elif not new_postal_code[2] in upper_characters:
-        print("invalid postal code")
-        return None
-    elif new_postal_code[3] != " ":
-        print("invalid postal code")
-        return None
-    elif not new_postal_code[4] in "0123456789":
-        print("invalid postal code")
-        return None
-    elif not new_postal_code[5] in upper_characters:
-        print("invalid postal code")
-        return None
-    elif not new_postal_code[6] in "0123456789":
-        print("invalid postal code")
-        return None
-    else:
-        # new user postal code is updated
-        user.postal_code = new_postal_code
+    if menuItem == 4 or menuItem == 0:
+        # new postal code but be valid CDN postal code
+        if new_postal_code == " ":
+            # postal code not changed
+            pass
+        elif len(new_postal_code) != 7:
+            print("Postal code must be 7 characters.")
+            return None
+        elif not new_postal_code[0] in upper_characters:
+            print("invalid postal code")
+            return None
+        elif not new_postal_code[1] in "0123456789":
+            print("invalid postal code")
+            return None
+        elif not new_postal_code[2] in upper_characters:
+            print("invalid postal code")
+            return None
+        elif new_postal_code[3] != " ":
+            print("invalid postal code")
+            return None
+        elif not new_postal_code[4] in "0123456789":
+            print("invalid postal code")
+            return None
+        elif not new_postal_code[5] in upper_characters:
+            print("invalid postal code")
+            return None
+        elif not new_postal_code[6] in "0123456789":
+            print("invalid postal code")
+            return None
+        else:
+            # new user postal code is updated
+            user.postal_code = new_postal_code
 
     # all user changes are committed to database
     db.session.commit()
@@ -369,7 +372,7 @@ def create_listing(owner_email, password, title, description, price):
     # today date must be after 2021-01-02
     # and before 2025-01-02
     today = date.today()
-    print(today)
+
     if 2025 < today.year < 2021:
         print("Year out of range.")
         return None
@@ -398,11 +401,9 @@ def create_listing(owner_email, password, title, description, price):
 
     # set unique id for listing
     listing.id = str(uuid.uuid1())
-    print("Listing id created: ", listing.id)
 
     # set last modified date for listing
     listing.last_modified_date = today
-    print("Listing date: ", listing.last_modified_date)
 
     db.session.commit()
 
@@ -505,11 +506,6 @@ def update_listing(email, password, id, title, utitle, description,
             print("Description must be longer than title.")
             return None
 
-        #  check length of description against title
-        if len(description) < len(listing.title):
-            print("The listing title was longer than description.")
-            return None
-
         # update description
         listing.description = description
         print("Description updated.")
@@ -526,6 +522,10 @@ def update_listing(email, password, id, title, utitle, description,
         # price can only increase or stay same from listing amount
         if listing.price > price:
             print("Price can only increased, not decreased.")
+            return None
+
+        if listing.price == price:
+            print("New price is the same as old price.")
             return None
 
         # update price
@@ -550,6 +550,7 @@ def update_listing(email, password, id, title, utitle, description,
     # update last modified date
     if utitle or udescription or uprice:
         listing.last_modified_date = today
+        print("Last modified date updated.")
 
     db.session.commit()
     return listing
@@ -565,11 +566,13 @@ def get_listings(owner_id):
     print("Listings: \n")
     if owner_id:
         for listing in Listing.query.filter_by(owner_id=owner_id).all():
-            print(listing.title + ": " + listing.id)
+            print(listing.title + ": " + 
+                  listing.last_modified_date.strftime("%m/%d/%Y"))
         print('\n')
     else:
         for listing in Listing.query.all():
-            print(listing.title + ": " + listing.id)
+            print(listing.title + ": " + 
+                  listing.last_modified_date.strftime("%m/%d/%Y"))
         print('\n')
 
 
