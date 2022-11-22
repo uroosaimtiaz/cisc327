@@ -1,0 +1,37 @@
+Welcome to qb&b! 
+ 
+1. Register 
+2. Login 
+3. Exit 
+ 
+Please select one of the options above: Please enter your email: Please enter your password: welcome createlisting
+You are signed in as createlisting
+ 
+1. Log out 
+2. Home Page 
+3. Update Profile
+4. Exit 
+ 
+Please select one of the options above: Welcome to the home page!
+ 
+1. View all listings 
+2. View all of your listings 
+3. Create listing 
+4. Update listing 
+5. Exit home page 
+ 
+Please select one of the options above: 
+Thank you for creating a listing with qb&b.
+
+Please enter a valid title for the listing: Please enter a valid description for the listing: Please enter a valid price for the listing: Price must be at least 10.
+Please enter a valid price for the listing: Price out of range
+Listing creation FAILED
+Welcome to the home page!
+ 
+1. View all listings 
+2. View all of your listings 
+3. Create listing 
+4. Update listing 
+5. Exit home page 
+ 
+Please select one of the options above: 
