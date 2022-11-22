@@ -42,4 +42,4 @@ Folder structure:
 
 Current SCRUM Board Screenshot after sprint kickoff meeting in scrumboard.png.
 
-<img src="https://github.com/uroosaimtiaz/cisc327/blob/main/scrumboard.png?raw=true" width="800" />
+<img src="https://github.com/uroosaimtiaz/cisc327/blob/build-badge/scrumboard.png" width="800" />

@@ -201,7 +201,7 @@ def test_r3_1_user_update():
     """
 
     user = update_user("test2@test.com", "goodPass.123", "test91@test.com",
-                       "u8", "8 Songwood Drive", "M9M 1X3")
+                       "newUser", "8 Songwood Drive", "M9M 1X3", 0)
     assert user is not None
 
 
@@ -210,12 +210,12 @@ def test_r3_2_user_update():
         Testing R3-2: A postal code should be non-empty, alphanumeric only,
         and no special characters such as !.
     """
-    user = update_user("test9@test.com", "goodPass.123", "test9@test.com",
-                       "u8", "8 Songwood Drive", "")
+    user = update_user("test9@test.com", "goodPass.123", "",
+                       "", "", "", 4)
     assert user is None
 
-    user = update_user("test9@test.com", "goodPass.123", "test9@test.com",
-                       "u8", "8 Songwood Drive", "M9M !X3")
+    user = update_user("test9@test.com", "goodPass.123", "",
+                       "", "", "M9M !X3", 4)
     assert user is None
 
 
@@ -224,11 +224,11 @@ def test_r3_3_user_update():
         Testing R3-3: Postal code has to be a valid Canadian postal code.
     """
     user = update_user("test9@test.com", "goodPass.123", " ",
-                       "u8", "8 Songwood Drive", "m9M 1X3")
+                       "", "", "m9M 1X3", 4)
     assert user is None
 
     user = update_user("test9@test.com", "goodPass.123", " ",
-                       "u8", "8 Songwood Drive", "M9M 2X3")
+                       "", "", "M9M 2X3", 4)
     assert user is not None
 
 
@@ -237,16 +237,16 @@ def test_r3_4_user_update():
         Testing R3-4: User name follows the requirements above.
     """
     user = update_user("test91@test.com", "goodPass.123", "test912@test.com",
-                       " u!8", "8 Songwood Drive", "M9M 1X3")
+                       " u!8", "8 Songwood Drive", "M9M 1X3", 1)
     assert user is None
 
-    user = update_user("test912@test.com", "goodPass.123", " ",
-                       "user81", "8 Songwood Drive", "M9M 1X3")
+    user = update_user("test91@test.com", "goodPass.123", " ",
+                       "user81", "8 Songwood Drive", "M9M 1X3", 1)
     assert user is not None
 
-    user = update_user("test912@test.com", "goodPass.123", " ",
-                       " ", "8 Songwood Drive", "M9M 1X3")
-    assert user is not None
+    user = update_user("test91@test.com", "goodPass.123", " ",
+                       " ", "", "M9M 1X3", 1)
+    assert user is None
 
 
 def test_r4_1_create_listing():
