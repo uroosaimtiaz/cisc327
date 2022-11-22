@@ -1,0 +1,96 @@
+Welcome to qb&b! 
+ 
+1. Register 
+2. Login 
+3. Exit 
+ 
+Please select one of the options above: 
+Thank you for registering with qb&b.
+
+Please enter a valid username: Please enter a valid email address: Please enter a valid password: Please enter the password again: 
+Registration Gift: We have given you a credit of $100 dollars.
+Registration successful.
+
+Welcome to qb&b! 
+ 
+1. Register 
+2. Login 
+3. Exit 
+ 
+Please select one of the options above: Please enter your email: Please enter your password: welcome testlistingupdate4
+You are signed in as testlistingupdate4
+ 
+1. Log out 
+2. Home Page 
+3. Update Profile
+4. Exit 
+ 
+Please select one of the options above: Welcome to the home page!
+ 
+1. View all listings 
+2. View all of your listings 
+3. Create listing 
+4. Update listing 
+5. Exit home page 
+ 
+Please select one of the options above: 
+Thank you for creating a listing with qb&b.
+
+Please enter a valid title for the listing: Please enter a valid description for the listing: Please enter a valid price for the listing: Listing created:  This is a valid title
+Listing created successfully
+Welcome to the home page!
+ 
+1. View all listings 
+2. View all of your listings 
+3. Create listing 
+4. Update listing 
+5. Exit home page 
+ 
+Please select one of the options above: Here are all the listings associated with this user: 
+
+1. This is a valid title
+Please select the listing you want to update:you selected This is a valid title
+Modify Title? Enter 1 [Yes] or 2 [No]: Enter new Title: Incorrect Title length.
+Modify Description? Enter 1 [Yes] or 2 [No]: Enter new description: Description is incorrect length.
+Modify Price? Enter 1 [Yes] or 2 [No]: Enter new Price: Price out of range
+Welcome to the home page!
+ 
+1. View all listings 
+2. View all of your listings 
+3. Create listing 
+4. Update listing 
+5. Exit home page 
+ 
+Please select one of the options above: Here are all the listings associated with this user: 
+
+1. This is a valid title
+Please select the listing you want to update:you selected This is a valid title
+Modify Title? Enter 1 [Yes] or 2 [No]: Enter new Title: Title contains illegal characters.
+Modify Description? Enter 1 [Yes] or 2 [No]: Enter new description: Description must be longer than title.
+Modify Price? Enter 1 [Yes] or 2 [No]: Welcome to the home page!
+ 
+1. View all listings 
+2. View all of your listings 
+3. Create listing 
+4. Update listing 
+5. Exit home page 
+ 
+Please select one of the options above: Here are all the listings associated with this user: 
+
+1. This is a valid title
+Please select the listing you want to update:you selected This is a valid title
+Modify Title? Enter 1 [Yes] or 2 [No]: Enter new Title: User already has a listing with same title.
+Modify Description? Enter 1 [Yes] or 2 [No]: Modify Price? Enter 1 [Yes] or 2 [No]: Welcome to the home page!
+ 
+1. View all listings 
+2. View all of your listings 
+3. Create listing 
+4. Update listing 
+5. Exit home page 
+ 
+Please select one of the options above: Here are all the listings associated with this user: 
+
+1. This is a valid title
+Please select the listing you want to update:you selected This is a valid title
+Modify Title? Enter 1 [Yes] or 2 [No]: Enter new Title: The listing title was longer than description.
+Modify Description? Enter 1 [Yes] or 2 [No]: 
