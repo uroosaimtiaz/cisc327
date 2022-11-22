@@ -106,10 +106,16 @@ def update_listing_page(email, password):
 
             uprice = input('Modify Price? Enter 1 [Yes] or 2 [No]: ')
             if int(uprice.strip()) == 1:
-                newPrice = input('Enter new Price: ')
-                update_listing(email, password, listings[(selection - 1)].id,
-                               '', False, '', False, 
-                               int(newPrice.strip()), True)
+                while (True):
+                    newPrice = input('Enter new Price: ')
+                    if (len(newPrice) != 0):
+                        update_listing(email, password, 
+                                       listings[(selection - 1)].id,
+                                       '', False, '', False, 
+                                       int(newPrice.strip()), True)
+                        break
+                    else:
+                        print("Please enter a price.")
 
         else:
             print("\nInvalid input.\n")
@@ -140,6 +146,7 @@ def update_profile_page():
     new_email = " "
     new_billing_address = " "
     new_postal_code = " "
+    menuItem = 0
 
     print("Welcome to the update profile page!\n")
 
@@ -156,7 +163,7 @@ def update_profile_page():
     # checking if user exists in the first part of update_user
     # returns None if user does not exist
     user_info = update_user(old_email, password, new_email, new_name,
-                            new_billing_address, new_postal_code)
+                            new_billing_address, new_postal_code, 5)
 
     if user_info is not None:
         print("Welcome to the update profile page!\n")
@@ -169,26 +176,32 @@ def update_profile_page():
         print("**********************************\n\n")
 
         continue_updating = True  # used to check if user wants to update more
-
+        menuItems = [False, False, False, False]
+        
         while continue_updating:
             selection = input("Which information would you like to update: ")
-
             if selection == '1':
                 # updating username
+                menuItems[0] = True
                 new_name = input(
                     "Please enter a valid new username: ")
             elif selection == '2':
                 # updating email
+                menuItems[1] = True
                 new_email = input(
                     "Please enter a valid new email: ")
             elif selection == '3':
+                menuItems[2] = True
                 # updating Billing Address
                 new_billing_address = input(
                     "Please enter a valid new billing address: ")
-            else:
+            elif selection == '4':
                 # updating postal code
+                menuItems[3] = True
                 new_postal_code = input("Please enter a valid new postal "
                                         "code: ")
+            else:
+                print("Invalid Menu Item.")
 
             # prompting the user if they would like to update different option
             add_option = input("\nWould you like to update another option "
@@ -201,6 +214,17 @@ def update_profile_page():
                 continue_updating = False
 
         #  updating the profile
-        update_user(old_email, password, new_email, new_name,
-                    new_billing_address,
-                    new_postal_code)
+        if menuItems[0] is True and menuItems[1] is True and \
+           menuItems[2] is True and menuItems[3] is True:
+            menuItem = 0
+            update_user(old_email, password, new_email, new_name,
+                        new_billing_address,
+                        new_postal_code, menuItem)
+        else:
+            for i in range(4):
+                if menuItems[i] is True:
+                    menuItem = i + 1
+                    update_user(old_email, password, new_email, new_name,
+                                new_billing_address,
+                                new_postal_code, menuItem)
+
