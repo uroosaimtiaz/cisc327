@@ -257,7 +257,7 @@ def test_r4_1_create_listing():
     #  create user for testing
     user = register("listuser", "list@test.com", "Password123!")
 
-    #  create a succussful listing associated with user
+    #  create a successful listing associated with user
     listing_1 = create_listing("list@test.com", "Password123!",
                                "This is an example title",
                                "This is an example description", 45)
