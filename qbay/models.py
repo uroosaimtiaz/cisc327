@@ -363,7 +363,7 @@ def create_listing(owner_email, password, title, description, price):
 
     # price has to be between 10 and 10000 and a number
     if isinstance(price, int) or isinstance(price, float) is True:
-        print("input is a number")
+        print("")
     else:
         print("Price is not a number")
         return None
