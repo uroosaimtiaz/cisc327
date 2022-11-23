@@ -47,8 +47,8 @@ def test_password():
             if rand_email_first_part not in used_numbers_first_part and \
                     rand_email_second_part not in used_numbers_second_part:
                 num_used = False
-        rand_email = str(rand_email_first_part) + \
-                     str(rand_email_second_part) + "@test.com"
+        rand_email = str(rand_email_first_part) + str(rand_email_second_part) \
+            + "@test.com"
         try:
             register("name", rand_email, payload)
         except Exception:
