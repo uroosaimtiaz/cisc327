@@ -1,4 +1,4 @@
-from turtle import up
+# from turtle import up
 from qbay import app
 from flask_sqlalchemy import SQLAlchemy
 import string
