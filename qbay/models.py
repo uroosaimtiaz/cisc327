@@ -361,12 +361,16 @@ def create_listing(owner_email, password, title, description, price):
         print("Description must be longer than title.")
         return None
 
-    # price has to be between 10 and 10000
-    if price > 10000:
-        print("Price out of range")
-        return None
-    if price < 10:
-        print("Price out of range")
+    # price has to be between 10 and 10000 and a number
+    if isinstance(price, int) or isinstance(price, float) is True:
+        if price > 10000:
+            print("Price out of range")
+            return None
+        if price < 10:
+            print("Price out of range")
+            return None
+    else:
+        print("Price is not a number")
         return None
 
     # today date must be after 2021-01-02
