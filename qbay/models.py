@@ -4,7 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 import string
 from email_validator import validate_email, EmailNotValidError
 import uuid
-from datetime import date
+from datetime import date, timedelta
+import calendar
 
 '''
 This file defines data models and related business logics
@@ -60,9 +61,13 @@ class Booking(db.Model):
         db.Integer, nullable=False)
     listing_id = db.Column(
         db.String, nullable=False)
+    owner_id = db.Column(
+        db.String, nullable=False)
     user_id = db.Column(
         db.String, nullable=False)
-    date = db.Column(
+    start_date = db.Column(
+        db.Date)
+    end_date = db.Column(
         db.Date)
 
     def __repr__(self):
@@ -582,3 +587,124 @@ def get_listings(owner_id):
 
 def return_user_listings(owner_email):
     return Listing.query.filter_by(owner_id=owner_email).all()
+
+
+def update_balance(email, password, amount):
+    '''
+    Update User Balance
+        Parameters:
+        email (string):         email of the owner
+        password (string):      password of the owner
+        amount (integer):       amount to be added
+        
+        Returns:
+        True if user balance updated, false otherwise
+    '''
+    # user must provide correct credentials to login
+    user = login(email, password)
+
+    # if user fails to login no changes can be made
+    if user is None:
+        print("User does not exist or login unsuccessful.")
+        return False
+
+    user.balance = user.balance + amount
+    print("Balance updated. New balance: " + str(user.balance))
+    db.session.commit()
+    return True
+
+
+def create_booking(email, password, listing_id, price, start_date, duration):
+    """
+    Create a booking
+        Parameters:
+        email (string):         email of the owner
+        password (string):      password of the owner
+        listing_id (string):    The ID of the listing
+        price (integer):        listing price
+        start_date (Date):      start date of the booking
+        duration (integer):     number of days in booking
+        
+        Returns:
+        Booking if successfully created or None
+    """
+    # user must provide correct credentials to login
+    user = login(email, password)
+
+    # if user fails to login no booking can be made
+    if user is None:
+        print("User does not exist or login unsuccessful.")
+        return None
+
+    # find listing to be booked
+    listing = get_listing(listing_id)
+    if listing is None:
+        print("Listing was not found.")
+        return None
+
+    # check if user is not listing owner
+    if (listing.owner_id == user.email):
+        print("User cannot create booking on own listing.")
+        return None
+
+    # check price
+    if (price * duration > user.balance):
+        print("Insufficient funds. Min amount needed: " + 
+              str(price * duration))
+        print("Add to balance and re-try.")
+        return None
+    
+    # calculate end date of booking
+    end_date = start_date + timedelta(days=duration)
+
+    # check availibility of listing
+    if (booking_availibility(listing_id, start_date, end_date)):
+        print("Booking available.")
+    else:
+        print("Booking not available.")
+        return None
+
+    booking = Booking(listing_id=listing_id, owner_id=listing.owner_id, 
+                      user_id=user.id, start_date=start_date, 
+                      end_date=end_date, price=price * duration)
+    db.session.add(booking)
+    # set unique id for booking
+    booking.id = str(uuid.uuid1())
+    db.session.commit()
+    return booking
+
+
+def get_bookings(listing_id):
+    """
+    Print all bookings associated with a listing by start date
+        Parameters:
+        listing_id (string):    The ID of the listing
+    """   
+    print("\nPrinting all bookings for requested listing. \n")
+    for booking in Booking.query.filter_by(listing_id=listing_id).\
+            order_by(Booking.start_date).all():
+        print("Booking ID: " + booking.id + "\nStart date: " 
+              + booking.start_date.strftime("%m/%d/%Y") + 
+              " End date: " + booking.end_date.strftime("%m/%d/%Y \n"))
+
+
+def booking_availibility(listing_id, start_date, end_date):
+    """
+    Find if a listing is available for requested dates
+        Parameters:
+        listing_id (string):    The ID of the listing
+        start_date (Date):      start date of the booking
+        end_date (Date):        end date of the booking
+
+        Returns:
+        True if listing is available and False otherwise
+    """
+    for booking in Booking.query.filter_by(listing_id=listing_id).\
+            order_by(Booking.start_date).all():
+        if (booking.start_date <= start_date <= booking.end_date):
+            print("Booking start date not available.")
+            return False
+        elif (booking.start_date <= end_date <= booking.end_date):
+            print("Booking end date not available")
+            return False
+    return True
