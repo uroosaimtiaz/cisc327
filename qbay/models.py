@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 import string
 from email_validator import validate_email, EmailNotValidError
 import uuid
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import calendar
 
 '''
@@ -581,7 +581,8 @@ def get_listings(owner_id):
     else:
         for listing in Listing.query.all():
             print(listing.title + ": " + 
-                  listing.last_modified_date.strftime("%m/%d/%Y"))
+                  listing.last_modified_date.strftime("%m/%d/%Y") + '\n')
+            print("listing id:" + listing.id)
         print('\n')
 
 
@@ -590,38 +591,42 @@ def return_user_listings(owner_email):
 
 
 def update_balance(email, password, amount):
-    '''
+    """
     Update User Balance
         Parameters:
         email (string):         email of the owner
         password (string):      password of the owner
         amount (integer):       amount to be added
-        
+
         Returns:
         True if user balance updated, false otherwise
-    '''
+    """
     # user must provide correct credentials to login
     user = login(email, password)
 
-    # if user fails to login no changes can be made
+    # if user fails to log in no changes can be made
     if user is None:
         print("User does not exist or login unsuccessful.")
         return False
-
-    user.balance = user.balance + amount
+    try:
+        num = int(amount)
+        assert num > 0
+    except:
+        print("Amount must be a positive integer.")
+        return False
+    user.balance = user.balance + num
     print("Balance updated. New balance: " + str(user.balance))
     db.session.commit()
     return True
 
 
-def create_booking(email, password, listing_id, price, start_date, duration):
+def create_booking(email, password, listing_id, start_date, duration):
     """
     Create a booking
         Parameters:
         email (string):         email of the owner
         password (string):      password of the owner
         listing_id (string):    The ID of the listing
-        price (integer):        listing price
         start_date (Date):      start date of the booking
         duration (integer):     number of days in booking
         
@@ -631,7 +636,7 @@ def create_booking(email, password, listing_id, price, start_date, duration):
     # user must provide correct credentials to login
     user = login(email, password)
 
-    # if user fails to login no booking can be made
+    # if user fails to log in no booking can be made
     if user is None:
         print("User does not exist or login unsuccessful.")
         return None
@@ -643,30 +648,42 @@ def create_booking(email, password, listing_id, price, start_date, duration):
         return None
 
     # check if user is not listing owner
-    if (listing.owner_id == user.email):
+    if listing.owner_id == user.email:
         print("User cannot create booking on own listing.")
         return None
 
-    # check price
-    if (price * duration > user.balance):
+    # check if user has enough balance to book
+    price = listing.price
+    try:
+        numdays = int(duration)
+        assert numdays > 0
+    except:
+        print("Amount must be a positive integer.")
+        return None
+    if price * numdays > user.balance:
         print("Insufficient funds. Min amount needed: " + 
-              str(price * duration))
+              str(price * numdays))
         print("Add to balance and re-try.")
         return None
     
     # calculate end date of booking
-    end_date = start_date + timedelta(days=duration)
-
-    # check availibility of listing
-    if (booking_availibility(listing_id, start_date, end_date)):
+    try:
+        startday = datetime.strptime(start_date, "%m-%d-%Y")
+        startdate = startday.date()
+    except:
+        print("Start date must be in format: mm-dd-yyyy")
+        return None
+    end_date = startdate + timedelta(days=numdays)
+    # check availability of listing
+    if booking_availibility(listing_id, startdate, end_date):
         print("Booking available.")
     else:
         print("Booking not available.")
         return None
 
     booking = Booking(listing_id=listing_id, owner_id=listing.owner_id, 
-                      user_id=user.id, start_date=start_date, 
-                      end_date=end_date, price=price * duration)
+                      user_id=user.id, start_date=startdate,
+                      end_date=end_date, price=price * numdays)
     db.session.add(booking)
     # set unique id for booking
     booking.id = str(uuid.uuid1())
@@ -701,10 +718,9 @@ def booking_availibility(listing_id, start_date, end_date):
     """
     for booking in Booking.query.filter_by(listing_id=listing_id).\
             order_by(Booking.start_date).all():
-        if (booking.start_date <= start_date <= booking.end_date):
-            print("Booking start date not available.")
+        if booking.start_date <= start_date <= booking.end_date:
             return False
-        elif (booking.start_date <= end_date <= booking.end_date):
-            print("Booking end date not available")
+        elif booking.start_date <= end_date <= booking.end_date:
             return False
     return True
+

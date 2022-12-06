@@ -1,7 +1,7 @@
 from qbay import *
 from qbay.cli import login_page, register_page, print_all_listings
-from qbay.cli import login_page, create_listing_page, update_listing_page, \
-    update_profile_page
+from qbay.cli import create_listing_page, update_listing_page, \
+    update_profile_page, create_booking_page, update_balance_page
 
 '''
     This main file will create a main menu that takes
@@ -70,7 +70,9 @@ def home_page(user):
             '2. View all of your listings \n'
             '3. Create listing \n'
             '4. Update listing \n'
-            '5. Exit home page \n \n'
+            '5. Create booking \n'
+            '6. Update balance \n'
+            '7. Exit home page \n \n'
             'Please select one of the options above: ')
         selection = selection.strip()
         if selection == '1':
@@ -82,6 +84,10 @@ def home_page(user):
         elif selection == '4':
             update_listing_page(user.email, user.password)
         elif selection == '5':
+            create_booking_page(user.email, user.password)
+        elif selection == '6':
+            update_balance_page(user.email, user.password)
+        elif selection == '7':
             break
 
 
