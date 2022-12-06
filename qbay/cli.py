@@ -1,6 +1,6 @@
 from qbay.models import get_listings, register, get_users, create_listing
 from qbay.models import login, return_user_listings, update_listing, \
-    update_user
+    update_user, create_booking, update_balance
 
 '''
     This file creates the different screens or pages a user
@@ -106,9 +106,9 @@ def update_listing_page(email, password):
 
             uprice = input('Modify Price? Enter 1 [Yes] or 2 [No]: ')
             if int(uprice.strip()) == 1:
-                while (True):
+                while True:
                     newPrice = input('Enter new Price: ')
-                    if (len(newPrice) != 0):
+                    if len(newPrice) != 0:
                         update_listing(email, password, 
                                        listings[(selection - 1)].id,
                                        '', False, '', False, 
@@ -228,3 +228,25 @@ def update_profile_page():
                                 new_billing_address,
                                 new_postal_code, menuItem)
 
+def create_booking_page(email, password):
+    """
+    This screen prompts the user to create a booking by providing a valid
+    listing id.
+    """
+    listing_id = input('Enter the listing id: ')
+    start_date = input('Enter the start date (MM-DD-YYYY): ')
+    duration = input('Enter the duration (in days): ')
+    if create_booking(email, password, listing_id, start_date, duration):
+        print('Booking created successfully!')
+    else:
+        print('Booking creation failed.')
+
+def update_balance_page(email, password):
+    """
+    This screen prompts the user to update their balance.
+    """
+    amount = input('Enter the amount you want to add to your balance: ')
+    if update_balance(email, password, amount):
+        print('Your balance has been updated.')
+    else:
+        print('Your balance could not be updated.')
