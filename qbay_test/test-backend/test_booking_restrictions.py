@@ -17,7 +17,7 @@ def test_r1_1_create_booking():
 
     #   book
     booking = create_booking("buyerr1@test.com", "Password123!", listing.id,
-                             listing.price, date.today(), 1)
+                             "11-11-2022", 1)
 
     assert booking is not None
 
@@ -35,7 +35,7 @@ def test_r1_2_create_booking():
 
     #   book
     booking = create_booking("sellerr2@test.com", "Password123!", listing.id,
-                             listing.price, date.today(), 1)
+                             "11-11-2022", 1)
 
     assert booking is None
 
@@ -60,7 +60,7 @@ def test_r1_3_create_booking():
 
     #   book
     booking = create_booking("sellerr2@test.com", "Password123!", listing.id,
-                             listing.price, date.today(), 1)
+                             "11-11-2022", 1)
 
     assert booking is None
 
@@ -81,14 +81,14 @@ def test_r1_4_create_booking():
 
     #   book with buyer 1
     booking1 = create_booking("buyerr4b1@test.com", "Password123!", listing.id,
-                              listing.price, date.today(), 1)
+                              "11-11-2022", 1)
     
     #   create buyer 2
     register("buyerr4b2", "buyerr4b2@test.com", "Password123!")
 
     #   book with buyer 2
     booking2 = create_booking("buyerr4b2@test.com", "Password123!", listing.id,
-                              listing.price, date.today(), 1)
+                              "11-11-2022", 1)
 
     assert booking1 is not None        
     assert booking2 is None

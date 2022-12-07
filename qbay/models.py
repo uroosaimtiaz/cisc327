@@ -696,9 +696,9 @@ def create_booking(email, password, listing_id, start_date, duration):
     # remove booking balance from user's balance
     newBalance = user.balance - price * duration
     user.balance = newBalance
-    print("The amount $" + newBalance + 
+    print("The amount $" + str(newBalance) + 
           " has been deducted from your balance.")
-    print("Your remaining balance is : $" + user.balance)
+    print("Your remaining balance is : $" + str(user.balance))
 
     db.session.commit()
     return booking
