@@ -581,13 +581,18 @@ def get_listings(owner_id):
     else:
         for listing in Listing.query.all():
             print(listing.title + ": " + 
-                  listing.last_modified_date.strftime("%m/%d/%Y") + '\n')
+                  listing.last_modified_date.strftime("%m/%d/%Y") + 
+                  " Per night: $" + str(listing.price) + '\n')
             print("listing id:" + listing.id)
         print('\n')
 
 
 def return_user_listings(owner_email):
     return Listing.query.filter_by(owner_id=owner_email).all()
+
+
+def return_all_listings():
+    return Listing.query.all()
 
 
 def update_balance(email, password, amount):
@@ -611,7 +616,7 @@ def update_balance(email, password, amount):
     try:
         num = int(amount)
         assert num > 0
-    except:
+    except Exception:
         print("Amount must be a positive integer.")
         return False
     user.balance = user.balance + num
@@ -657,7 +662,7 @@ def create_booking(email, password, listing_id, start_date, duration):
     try:
         numdays = int(duration)
         assert numdays > 0
-    except:
+    except Exception:
         print("Amount must be a positive integer.")
         return None
     if price * numdays > user.balance:
@@ -670,7 +675,7 @@ def create_booking(email, password, listing_id, start_date, duration):
     try:
         startday = datetime.strptime(start_date, "%m-%d-%Y")
         startdate = startday.date()
-    except:
+    except Exception:
         print("Start date must be in format: mm-dd-yyyy")
         return None
     end_date = startdate + timedelta(days=numdays)
@@ -687,6 +692,14 @@ def create_booking(email, password, listing_id, start_date, duration):
     db.session.add(booking)
     # set unique id for booking
     booking.id = str(uuid.uuid1())
+
+    # remove booking balance from user's balance
+    newBalance = user.balance - price * duration
+    user.balance = newBalance
+    print("The amount $" + newBalance + 
+          " has been deducted from your balance.")
+    print("Your remaining balance is : $" + user.balance)
+
     db.session.commit()
     return booking
 

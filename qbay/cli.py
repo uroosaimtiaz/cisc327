@@ -1,6 +1,7 @@
 from qbay.models import get_listings, register, get_users, create_listing
 from qbay.models import login, return_user_listings, update_listing, \
-    update_user, create_booking, update_balance
+    update_user, create_booking, update_balance, return_all_listings, \
+    get_listing
 
 '''
     This file creates the different screens or pages a user
@@ -228,18 +229,45 @@ def update_profile_page():
                                 new_billing_address,
                                 new_postal_code, menuItem)
 
+
 def create_booking_page(email, password):
     """
     This screen prompts the user to create a booking by providing a valid
     listing id.
     """
-    listing_id = input('Enter the listing id: ')
+    listings = return_all_listings()
+
+    if (len(listings) == 0):
+        print("There are currently no active listings.")
+        return
+
+    print('Here are all the listings: \n')
+    for i in range(len(listings)):
+        print(f'{(i + 1)}. {listings[i].title}')
+    
+    try:
+        selection = int(input('Please select the listing you want to book:'))
+    except Exception:
+        print("Input could not be resolved into number.")
+        return
+   
+    if selection < 1 or selection > len(listings):
+        print("Invalid number.")
+        return
+
+    print(f'you selected {listings[(selection - 1)].title}')
+    
+    listing = get_listing(listings[(selection - 1)].id)
+
+    # listing_id = input('Enter the listing id: ')
     start_date = input('Enter the start date (MM-DD-YYYY): ')
     duration = input('Enter the duration (in days): ')
-    if create_booking(email, password, listing_id, start_date, duration):
+    if create_booking(email, password, listing.id, 
+                      start_date, duration):
         print('Booking created successfully!')
     else:
         print('Booking creation failed.')
+
 
 def update_balance_page(email, password):
     """
