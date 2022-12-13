@@ -34,6 +34,7 @@ def test_password():
             exception_counter += 1
     assert exception_counter is 0
 
+
 def test_listing_id():
     exception_counter = 0
     f = open(zip_file_path, "r")
@@ -45,6 +46,7 @@ def test_listing_id():
             exception_counter += 1
     assert exception_counter is 0
 
+
 def test_start_date():
     exception_counter = 0
     f = open(zip_file_path, "r")
@@ -55,13 +57,14 @@ def test_start_date():
             exception_counter += 1
     assert exception_counter is 0
 
+
 def test_duration():
     exception_counter = 0
     f = open(zip_file_path, "r")
     for payload in f:
         try:
             create_booking('test@test.com', "goodPass.123", "id", "01-02-1000",
-             payload)
+                           payload)
         except Exception:
             exception_counter += 1
     assert exception_counter is 0
