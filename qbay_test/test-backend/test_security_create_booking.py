@@ -40,8 +40,8 @@ def test_listing_id():
     f = open(zip_file_path, "r")
     for payload in f:
         try:
-            create_booking('test@test.com', "goodPass.123", payload, 
-            "01-02-1000", "5")
+            create_booking('test@test.com', "goodPass.123", payload,
+                           "01-02-1000", "5")
         except Exception:
             exception_counter += 1
     assert exception_counter is 0
