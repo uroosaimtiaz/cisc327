@@ -19,7 +19,7 @@ special_characters = list(string.punctuation)
 
 
 class User(db.Model):
-    id = db.Column(db.String)
+    id = db.Column(db.String(128))
     username = db.Column(
         db.String(80), nullable=False)
     email = db.Column(
